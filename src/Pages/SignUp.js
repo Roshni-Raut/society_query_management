@@ -1,10 +1,11 @@
 import React, { useState} from 'react';
-import {createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth'
-import {auth} from '../firebase'
-import { Alert } from 'react-bootstrap';
-import { Box, Button, Container, Grid, TextField, Typography } from '@mui/material';
+import {createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile} from 'firebase/auth'
+import {auth, db} from '../firebase'
+import { Alert, Box, Button, Container, Grid, TextField, Typography } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { useNavigate } from 'react-router-dom';
+import {  setDoc ,doc} from "firebase/firestore"; 
+import { async } from '@firebase/util';
 
 export const SignUp = () => {
   const [user,setUser]=useState("")
@@ -18,6 +19,13 @@ export const SignUp = () => {
   const color="#645CAA"
   const nav=useNavigate();
 
+  const invalidPass=()=>{
+    if(pass!== cpass){
+      setError("Password doesn't match");
+      return 1
+    }
+    return 0
+  }
   const register=(e)=>{
     e.preventDefault();
     setLoading(true)
@@ -25,13 +33,29 @@ export const SignUp = () => {
     if(pass!== cpass){
       setError("Password doesn't match");
     }
-    else{
+    else
+    {
       createUserWithEmailAndPassword(auth, email, pass).then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user)
-        nav("/login");
+        const userc = userCredential.user;
+        
+        updateProfile(auth.currentUser, {
+          displayName: user
+        }).then(async()=>{
+          const data= {
+            name: user,
+            email:email
+          };
+          await setDoc(doc(db, "Profiles", userc.uid), data);
+        })
+        .catch((error) => {
+          console.log(error)
+          setError(error.code)
+        });
+
+        nav("/customer-dashboard");
       })
       .catch((error) => {
+        console.log(error)
         setError(error.code)
       });
     }
@@ -41,7 +65,7 @@ export const SignUp = () => {
     signInWithPopup(auth,new GoogleAuthProvider()).then((userCredential)=>{
       const user = userCredential.user;
       console.log(user)
-      nav("/login");
+      nav("/customer-dashboard");
     })
     .catch((error)=>{
       setError(error.code)
@@ -59,7 +83,7 @@ export const SignUp = () => {
               Create New User
               </Typography> 
             
-            {error && <Alert variant="danger">{error}</Alert>}
+            {error && <Alert severity="error">{error}</Alert>}
 
               <Box component="form" onSubmit={register} sx={{mt:3}} >
                 <Grid container spacing={2}>

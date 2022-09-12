@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState} from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
@@ -14,8 +14,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {mainListItems, secondaryListItems} from './NavList';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 import { List } from '@mui/material';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
 
 
 const drawerWidth = 240;
@@ -67,7 +69,22 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 function DashboardContent() {
+  const [loading,setLoading]=useState("")
   const [open, setOpen] = React.useState(true);
+  const nav=useNavigate();
+
+  const Logout=(e)=>{
+    e.preventDefault();
+    setLoading(true)
+        signOut(auth).then(()=>{
+          console.log("logout")
+          nav("/")      
+        })
+      .catch((error) => {
+        console.log(error.code)
+      });
+  setLoading(false)
+  }
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -94,7 +111,7 @@ function DashboardContent() {
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
-                <ExitToAppIcon/>
+                <ExitToAppIcon onClick={Logout}/>
               </Badge>
             </IconButton>
           </Toolbar>

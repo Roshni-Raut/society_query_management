@@ -25,7 +25,7 @@ export const mainListItems = (
     </ListItemButton>
     </NavLink>
 
-    <NavLink to="Query" style={{textDecoration: "none", color:"black"}}>
+    <NavLink to="query" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton >
       <ListItemIcon>
         <EngineeringSharpIcon />

@@ -1,39 +1,46 @@
 import React, { useState} from 'react';
-import {createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth'
+import {GoogleAuthProvider,  signInWithEmailAndPassword, signInWithPopup, signOut} from 'firebase/auth'
 import {auth} from '../firebase'
-import { Alert } from 'react-bootstrap';
-import { Box, Button, Container, Grid, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, TextField, Typography,Alert } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { useNavigate } from 'react-router-dom';
 
 export const SignIn = () => {
   const [email,setEmail]=useState("")
   const [pass,setPass]=useState("")
+  const [user,setUser]=useState("")
 
   const [error,setError]= useState()
+  const [success,setSuccess]= useState()
   const [loading,setLoading]= useState(false)
   
   const color="#645CAA"
   const nav=useNavigate();
 
-  const register=(e)=>{
+  const Login=(e)=>{
     e.preventDefault();
     setLoading(true)
     setError("")
-      createUserWithEmailAndPassword(auth, email, pass).then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user)
-        nav("/login");
-      })
-      .catch((error) => {
-        setError(error.code)
-      });
+    console.log("hii")
+        signInWithEmailAndPassword(auth,email,pass).then((userCredential)=>{
+          console.log(userCredential.user.email)
+          setSuccess("logged in")
+          setTimeout(()=>{
+            setSuccess("");
+          },3000);
+        }).catch((error) => {
+          setError(error.code)
+        });
   setLoading(false)
   }
   const onGoogleSignIn=()=>{
     signInWithPopup(auth,new GoogleAuthProvider()).then((userCredential)=>{
       const user = userCredential.user;
-      console.log(user)
+      console.log(user);
+      setSuccess("logged in")
+      setTimeout(()=>{
+        setSuccess("");
+      },3000);
       nav("/customer-dashboard");
     })
     .catch((error)=>{
@@ -51,10 +58,10 @@ export const SignIn = () => {
             <Typography component="h1" variant="h5">
               Login
               </Typography> 
-            
-            {error && <Alert variant="danger">{error}</Alert>}
+              {error && <Alert severity="error">{error}</Alert>}
+              {success && <Alert severity="success">{success}</Alert>}
 
-              <Box component="form" onSubmit={register} sx={{mt:3}} >
+              <Box component="form" onSubmit={Login} sx={{mt:3}} >
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={12}>
                   <TextField fullWidth label="Email address" type="email" onChange={(e)=>setEmail(e.target.value)} required/>
