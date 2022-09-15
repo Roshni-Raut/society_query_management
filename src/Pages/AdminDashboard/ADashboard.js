@@ -74,7 +74,7 @@ function DashboardContent() {
 
   useEffect(()=>{ // auto signout if user leaves
     return()=>{
-      //add confirmation box
+      //todo: add confirmation box
       Logout()
     }
   },[])
@@ -109,7 +109,7 @@ function DashboardContent() {
               <MenuIcon />
             </IconButton>
             <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-              Dashboard
+              Admin Dashboard
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
@@ -162,6 +162,6 @@ function DashboardContent() {
   );
 }
 
-export default function Dashboard() {
+export default function ADashboard() {
   return <DashboardContent />;
 }

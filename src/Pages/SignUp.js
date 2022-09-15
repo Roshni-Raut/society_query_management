@@ -3,29 +3,36 @@ import {createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, upd
 import {auth, db} from '../firebase'
 import { Alert, Box, Button, Container, Grid, TextField, Typography } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
-import { useNavigate } from 'react-router-dom';
 import {  setDoc ,doc} from "firebase/firestore"; 
-import { async } from '@firebase/util';
 
 export const SignUp = () => {
   const [user,setUser]=useState("")
   const [email,setEmail]=useState("")
   const [pass,setPass]=useState("")
   const [cpass,setCpass]=useState("")
+  const [success,setSuccess]=useState("")
 
   const [error,setError]= useState()
   const [loading,setLoading]= useState(false)
   
   const color="#645CAA"
-  const nav=useNavigate();
 
-  const invalidPass=()=>{
-    if(pass!== cpass){
-      setError("Password doesn't match");
-      return 1
-    }
-    return 0
+  const createProfile=(userCredential)=>{
+    updateProfile(auth.currentUser, {
+      displayName: user
+    }).then(async()=>{
+      const data= {
+        name: userCredential.displayName?userCredential.displayName:"Society Member",
+        email: userCredential.email
+      };
+      await setDoc(doc(db, "Profiles", userCredential.uid), data);
+    })
+    .catch((error) => {
+      console.log(error)
+      setError(error.code)
+    });
   }
+
   const register=(e)=>{
     e.preventDefault();
     setLoading(true)
@@ -36,41 +43,30 @@ export const SignUp = () => {
     else
     {
       createUserWithEmailAndPassword(auth, email, pass).then((userCredential) => {
-        const userc = userCredential.user;
         
-        updateProfile(auth.currentUser, {
-          displayName: user
-        }).then(async()=>{
-          const data= {
-            name: user,
-            email:email
-          };
-          await setDoc(doc(db, "Profiles", userc.uid), data);
-        })
-        .catch((error) => {
-          console.log(error)
-          setError(error.code)
-        });
-
-        nav("/customer-dashboard");
+        createProfile(userCredential.user);
+        setSuccess("Profile created successfully")
+        setTimeout(()=>{setSuccess("")},3000)
       })
       .catch((error) => {
         console.log(error)
         setError(error.code)
       });
     }
-  setLoading(false)
+    setLoading(false)
   }
+
   const onGoogleSignIn=()=>{
     signInWithPopup(auth,new GoogleAuthProvider()).then((userCredential)=>{
-      const user = userCredential.user;
-      console.log(user)
-      nav("/customer-dashboard");
+      createProfile(userCredential.user);
+      setSuccess("Profile created successfully")
+      setTimeout(()=>{setSuccess("")},3000)
     })
     .catch((error)=>{
       setError(error.code)
     })
   }
+
   return (
     <div>
     <Container component="main" maxWidth="xs">
@@ -84,6 +80,7 @@ export const SignUp = () => {
               </Typography> 
             
             {error && <Alert severity="error">{error}</Alert>}
+            {success && <Alert severity="success">{success}</Alert>}
 
               <Box component="form" onSubmit={register} sx={{mt:3}} >
                 <Grid container spacing={2}>
@@ -99,6 +96,7 @@ export const SignUp = () => {
                   <Grid item xs={12} sm={12}>
                   <TextField fullWidth label="Confirm Password" type="password" onChange={(e)=>setCpass(e.target.value)} autoComplete="off" required/>
                   </Grid>
+                  {pass!==cpass && <Alert severity="error">Password doesn't match</Alert>}
                   <Grid item xs={12} sm={12}>
                     <Button fullWidth disabled={loading} type="submit"  style={{backgroundColor:color}} variant="contained" >Sign in</Button>
                   </Grid>
