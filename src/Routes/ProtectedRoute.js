@@ -5,11 +5,6 @@ import { useProfile } from '../Context/profile.context';
 
 export const ProtectedRoute = () => {
   const {profile,loading}=useProfile();
-  if(profile){
-    console.log(profile.email,loading)
-  }else{
-    console.log(profile,loading)
-  }
 
   if(loading && !profile){
     return <LinearProgress color="secondary"/>

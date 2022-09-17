@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Query = () => {
+export const AQuery = () => {
   return (
     <div>Query</div>
   )

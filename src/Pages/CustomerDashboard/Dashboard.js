@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
@@ -7,20 +7,20 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {mainListItems, secondaryListItems} from './NavList';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { Outlet, Route, Routes, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { List } from '@mui/material';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase';
 
 
 const drawerWidth = 240;
+const color="#645CAA";
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -71,13 +71,13 @@ const mdTheme = createTheme();
 function DashboardContent() {
   const [open, setOpen] = React.useState(true);
   const nav=useNavigate();
-
+/*
   useEffect(()=>{ // auto signout if user leaves
     return()=>{
       //add confirmation box
       Logout()
     }
-  },[])
+  },[])*/
 
   const Logout=()=>{
         signOut(auth).then(()=>{
@@ -96,7 +96,7 @@ function DashboardContent() {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <AppBar position="absolute" open={open}>
-          <Toolbar sx={{pr: '24px', }}>{/*keep right padding when drawer closed*/}
+          <Toolbar sx={{pr: '24px',backgroundColor:color }}>{/*keep right padding when drawer closed*/}
             <IconButton
               edge="start"
               color="inherit"
@@ -111,10 +111,8 @@ function DashboardContent() {
             <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
               Dashboard
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <ExitToAppIcon onClick={Logout}/>
-              </Badge>
+            <IconButton color="inherit" onClick={Logout}>
+                <ExitToAppIcon />
             </IconButton>
           </Toolbar>
         </AppBar>
@@ -150,7 +148,7 @@ function DashboardContent() {
             overflow: 'auto',
           }}>
         <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Container maxWidth="lg" sx={{ mt: 1, mb: 1 }}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                     {/*Nested routing*/}
                     <Outlet/>

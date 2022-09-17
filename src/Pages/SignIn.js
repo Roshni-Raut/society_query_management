@@ -1,10 +1,9 @@
 import React, { useState} from 'react';
-import {GoogleAuthProvider,  signInWithEmailAndPassword, signInWithPopup} from 'firebase/auth'
+import { signInWithEmailAndPassword} from 'firebase/auth'
 import {auth} from '../firebase'
-import { Box, Button, Container, Grid, TextField, Typography,Alert } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
+import { Box, Button, Container, Grid, TextField, Typography,Alert, CircularProgress } from '@mui/material';
+
 import { useNavigate } from 'react-router-dom';
-import { async } from '@firebase/util';
 
 export const SignIn = () => {
   const [email,setEmail]=useState("")
@@ -23,8 +22,6 @@ export const SignIn = () => {
     setError("")
     try{
       await signInWithEmailAndPassword(auth,email,pass).then((userCredential)=>{
-        console.log(userCredential.user.email)
-        console.log(auth.currentUser)
         if(userCredential.user.email==='rohitsraut95@gmail.com'){
           nav("/admin-dashboard")
         }else{
@@ -32,7 +29,7 @@ export const SignIn = () => {
         }
       })
     }catch(error){
-      setError(error.code)
+      setError(error.code+": "+error.message)
     }
     setLoading(false)
   }
@@ -46,7 +43,9 @@ export const SignIn = () => {
       setError(error.code)
     })
   }*/
-  return (
+  return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'100vh'}}>
+  <CircularProgress />
+</Container>:
     <div>
     <Container component="main" maxWidth="xs">
       <Box sx={{marginTop: 8,

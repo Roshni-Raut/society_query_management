@@ -13,7 +13,6 @@ export const ProfileProvider=({children})=>{
         setLoading(true);
         onAuthStateChanged(auth, (user) => {
             if(user){
-                console.log("user:",user.email);
                 const data={
                     name: user.name,
                     uid: user.uid,
@@ -21,7 +20,7 @@ export const ProfileProvider=({children})=>{
                 }
                 onSnapshot (doc(db, "Profiles", user.uid), (doc) => {
                     const userc=doc.data()
-                    console.log("userc: ",userc)
+                    console.log("Profile.context: ",userc)
                 });
                 setProfile(data);
                 setLoading(false);

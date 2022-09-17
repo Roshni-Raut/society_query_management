@@ -13,6 +13,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from '@mui/material/Badge';
 import { NavLink } from 'react-router-dom';
+import PersonIcon from '@mui/icons-material/Person';
 
 export const mainListItems = (
   <React.Fragment>
@@ -49,6 +50,15 @@ export const mainListItems = (
         <SecurityIcon />
       </ListItemIcon>
       <ListItemText primary="My Gate" />
+    </ListItemButton>
+  </NavLink>
+
+  <NavLink to="profile" style={{textDecoration: "none", color:"black"}}>
+    <ListItemButton>
+      <ListItemIcon>
+        <PersonIcon/>
+      </ListItemIcon>
+      <ListItemText primary="Profile" />
     </ListItemButton>
   </NavLink>
 

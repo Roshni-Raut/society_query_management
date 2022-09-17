@@ -11,6 +11,7 @@ import EventIcon from '@mui/icons-material/Event';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import Badge from '@mui/material/Badge';
 import { NavLink } from 'react-router-dom';
 
@@ -49,6 +50,15 @@ export const mainListItems = (
         <SecurityIcon />
       </ListItemIcon>
       <ListItemText primary="My Gate" />
+    </ListItemButton>
+  </NavLink>
+
+  <NavLink to="createUser" style={{textDecoration: "none", color:"black"}}>
+    <ListItemButton>
+      <ListItemIcon>
+        <PersonAddIcon/>
+      </ListItemIcon>
+      <ListItemText primary="Create New User" />
     </ListItemButton>
   </NavLink>
 
