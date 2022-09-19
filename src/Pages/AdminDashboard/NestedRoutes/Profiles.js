@@ -1,12 +1,14 @@
-import { CircularProgress, Container } from '@mui/material'
-import React from 'react'
-import { useQuery } from '../../../Context/currentprofile.context'
+import * as React from 'react';
+import { useAllProfile } from '../../../Context/admin.context';
+import { CircularProgress } from '@mui/material';
+import { Container } from '@mui/system';
 import { admin } from '../../../firebase';
 
-export const AQuery = () => {
- // const {profiles,loading}=useQuery()
-const loading=true;
-const profiles=[]
+
+export default function Profiles() {
+  const {profiles,loading}=useAllProfile();
+  
+
   return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'100vh'}}>
   <CircularProgress /> </Container>:
     <table className="table table-hover">
@@ -27,8 +29,11 @@ const profiles=[]
         <td>{x.email}</td>
       </tr>
       ))
+
       }
+      
+      
     </tbody>
   </table>
-  )
+  );
 }

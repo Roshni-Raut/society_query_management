@@ -17,6 +17,8 @@ import ADashboard from './Pages/AdminDashboard/ADashboard';
 import { AdminRoute } from './Routes/AdminRoute';
 import { UserProfile } from './Pages/CustomerDashboard/NestedRoutes/UserProfile';
 import { CreateProfile } from './Pages/AdminDashboard/NestedRoutes/CreateProfile';
+import Profiles from './Pages/AdminDashboard/NestedRoutes/Profiles';
+import { AdminProfile } from './Pages/AdminDashboard/NestedRoutes/AdminProfile';
 
 function App() {
   return (
@@ -36,10 +38,11 @@ function App() {
       <Route element={<AdminRoute/>}>
         <Route path="admin-dashboard" element={<ADashboard />}>
           <Route index element={<AHistory/>}/>
-          <Route path="history" element={<AHistory/>} />
+          <Route path="history" element={<Profiles/>} />
           <Route path="query" element={<AQuery/>} />
           <Route path="notifications" element={<ANotifications />} />
           <Route path="createUser" element={<CreateProfile />} />
+          <Route path="profile" element={<AdminProfile />} />
         </Route>
       </Route>
      </Routes>

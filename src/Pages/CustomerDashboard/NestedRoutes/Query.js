@@ -1,108 +1,72 @@
 
-import { Box, Button, Chip, Container, Divider, Grid,  MenuItem, TextField} from '@mui/material';
+import { Alert,Box, Button, Chip, CircularProgress, Container, Divider, Grid, MenuItem, TextField} from '@mui/material';
+import { collection, doc,   } from 'firebase/firestore';
 import React,{useState} from 'react'
+import {  db } from '../../../firebase';
 
 export const Query = () => {
-  const arr=[101,102,201,202]
+  const [success,setSuccess]=useState()
+  const [error,setError]=useState()
+  const [query]=useState({id:"",subject:"",priority:"",query:""})
   const [loading]= useState(false)
   const color="#645CAA"
-  return (
-    <div><Container>
-      
-    <Grid item xs={12}>
-      <Box component="form" sx={{mt:1}} >
-          
-          <Divider ><Chip label="Create New Profile" color="primary"/></Divider>
 
+  const send=async()=>{
+    //const queryRef = doc(collection(db, "Query"));
+    console.log(new Date().toString())
+    //await setDoc(queryRef, [...query,timeStamp:new Date().toString]);
 
-          <Grid container spacing={3} justifyContent="center" sx={{mb:2,mt:1}}>
-            <Grid item >
-              <TextField error={false} label="Firstname" size="small" type="text"  required/>
+    setSuccess("send ");
+    setTimeout(()=>{setSuccess("")},3000)
+  }
+  const cancel=()=>{
+    setError("send ");
+    setTimeout(()=>{setError("")},3000)
+  }
+  const handleInput=(e)=>{
+
+  }
+  return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'100vh'}}>
+  <CircularProgress />
+</Container>:
+    <div>
+    <Container direction="column" style={{ maxWidth:'50vw'}}>
+    <Grid container spacing={3} justifyContent="center" sx={{mb:2,mt:1}}>
+      {success && <Alert variant="filled" severity="success" sx={{position:'absolute', minWidth:'220px'}}>{success}</Alert>}
+      {error && <Alert variant="filled" severity="error" sx={{position:'absolute', minWidth:'220px'}}>{error}</Alert>}
+     </Grid>
+     
+      <Grid item xs={12} >
+        <Box component="form" onSubmit={send} sx={{mt:1}} >
+        
+            <Divider ><Chip label="Send your Query" color="primary"/></Divider>
+            <Grid item xs={12} sx={{mx:5,m:2,mt:5}}>
+                <TextField  value={query.subject} label="Subject" fullWidth name="fname" size="small" type="text" onChange={handleInput} required/>
+              </Grid>
+              <Grid item xs={12} sx={{mx:5,m:2,mt:5}}>
+              <TextField label="Priority" size="small" defaultValue="" sx={{minWidth:'225px'}} name="priority" onChange={handleInput} value={query.priority||''} select required>
+                <MenuItem value="1">Urgent</MenuItem>
+                <MenuItem value="2">Normal</MenuItem>
+                <MenuItem value="3">Take your time</MenuItem>
+              </TextField>
+              </Grid>
+              <Grid item sx={{mx:5,m:2}}>
+                <TextField  value={query.query} label="Query" minRows={5} fullWidth name="mname" size="small" type="text" onChange={handleInput} required multiline/>
             </Grid>
-            <Grid item >
-              <TextField error={false} label="Middlename" size="small" type="text"  required/>
+
+
+            <Grid container justifyContent="center" spacing={3} sx={{mt:1,mb:3}} >
+              <Grid item >
+                <Button size="small" disabled={loading} type="submit"  sx={{backgroundColor:color}} variant="contained" onClick={send}>Send</Button>
+              </Grid>
+              <Grid item >
+                <Button size="small" disabled={loading} type="reset"  sx={{backgroundColor:color}} variant="contained"  onClick={cancel}>Cancel</Button>
+              </Grid>
             </Grid>
-            <Grid item>
-              <TextField error={false} label="Lastname" size="small" type="text"  required/>
-            </Grid>
-          </Grid>
 
-
-
-
-          <Grid container spacing={3} justifyContent="center" sx={{mb:2}}>
-            <Grid item >
-              <TextField error={false} label="Phone no" size="small" type="text"  required/>
-            </Grid>
-            <Grid item >
-              <TextField error={false} label="Alternate Phone no." size="small" type="text"  required/>
-            </Grid>
-            <Grid item>
-              <TextField error={false} label="Adhaar number" size="small" type="text"  required/>
-            </Grid>
-          </Grid>
-
-
-          <Divider variant="middle" ><Chip label="Personal Details"variant="outlined" color="primary"/></Divider>
-
-
-
-          <Grid container spacing={3} justifyContent="center" sx={{mb:2,mt:0}}>
-            <Grid item>
-              <TextField error={false} label="Total Family Member" size="small" type="text"  required/>
-            </Grid>
-            <Grid item>
-            <TextField label="Gender" size="small" defaultValue="" sx={{minWidth:'225px'}}  required select>
-              <MenuItem value="Female">Female</MenuItem>
-              <MenuItem value="Male">Male</MenuItem>
-            </TextField>
-            </Grid>
-            <Grid item>
-              <TextField error={false} label="Date of Birth" size="small" type="date" sx={{minWidth:'225px'}}  InputLabelProps={{shrink: true, }} required/>
-            </Grid>
-          </Grid>
-
-
-
-
-          <Grid container spacing={3} justifyContent="center" sx={{mb:2}}>
-            <Grid item>
-            <TextField label="Flat No" size="small"defaultValue="" sx={{minWidth:'225px'}} select required>
-              {arr.map((x,i)=>(
-                <MenuItem value={x} key={x}>{x}</MenuItem>
-              )
-              )}
-            </TextField>
-            </Grid>
-            <Grid item>
-            <TextField label="Profession" size="small" type="text"  required/>
-            </Grid>
-            <Grid item>
-            <TextField label="Nationality" size="small"defaultValue="" sx={{minWidth:'225px'}} select required>
-              <MenuItem value="Indian">Indian</MenuItem>
-              <MenuItem value="Other">Other</MenuItem>
-            </TextField>
-            </Grid>
-          </Grid>
-              
-
-
-              <Divider variant="middle" ><Chip label="Login Details" variant="outlined" color="primary"/></Divider>
-
-
-
-          <Grid container justifyContent="center" spacing={3} sx={{mt:1,mb:3}} >
-            <Grid item >
-              <Button size="small" disabled={loading} type="submit"  sx={{backgroundColor:color}} variant="contained" >Send Query</Button>
-            </Grid>
-            <Grid item >
-              <Button size="small" disabled={loading} type="submit"  sx={{backgroundColor:color}} variant="contained" >Cancel</Button>
-            </Grid>
-          </Grid>
-          
-        </Box>
-    </Grid>
-          
-  </Container></div>
+          </Box>
+        </Grid>
+    </Container>
+  </div>
   )
 }

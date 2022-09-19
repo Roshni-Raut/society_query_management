@@ -1,6 +1,6 @@
 import React, { useState} from 'react';
 import { signInWithEmailAndPassword} from 'firebase/auth'
-import {auth} from '../firebase'
+import {admin, auth} from '../firebase'
 import { Box, Button, Container, Grid, TextField, Typography,Alert, CircularProgress } from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +22,7 @@ export const SignIn = () => {
     setError("")
     try{
       await signInWithEmailAndPassword(auth,email,pass).then((userCredential)=>{
-        if(userCredential.user.email==='rohitsraut95@gmail.com'){
+        if(userCredential.user.email===admin){
           nav("/admin-dashboard")
         }else{
           nav("/customer-dashboard")
@@ -33,16 +33,6 @@ export const SignIn = () => {
     }
     setLoading(false)
   }
-/*
-  const onGoogleSignIn=()=>{
-    
-    signInWithPopup(auth,new GoogleAuthProvider()).then((userCredential)=>{
-      nav("/customer-dashboard");
-    })
-    .catch((error)=>{
-      setError(error.code)
-    })
-  }*/
   return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'100vh'}}>
   <CircularProgress />
 </Container>:

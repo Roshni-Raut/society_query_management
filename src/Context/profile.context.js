@@ -1,27 +1,23 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth, db } from "../firebase";
-import { doc, onSnapshot } from "firebase/firestore";
+import { admin, auth, db } from "../firebase";
 
 const ProfileContext= createContext();
 
 export const ProfileProvider=({children})=>{
     const [profile,setProfile]=useState(null)
     const [loading, setLoading]=useState(true)
-
+    
     useEffect(()=>{
         setLoading(true);
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async(user) => {
             if(user){
+                console.log(user.email)
                 const data={
                     name: user.name,
                     uid: user.uid,
                     email: user.email        
                 }
-                onSnapshot (doc(db, "Profiles", user.uid), (doc) => {
-                    const userc=doc.data()
-                    console.log("Profile.context: ",userc)
-                });
                 setProfile(data);
                 setLoading(false);
             }

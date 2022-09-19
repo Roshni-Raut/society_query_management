@@ -35,6 +35,15 @@ export const mainListItems = (
     </ListItemButton>
   </NavLink>
 
+  <NavLink to="profile" style={{textDecoration: "none", color:"black"}}>
+    <ListItemButton>
+      <ListItemIcon>
+        <PersonIcon/>
+      </ListItemIcon>
+      <ListItemText primary="Profile" />
+    </ListItemButton>
+  </NavLink>
+  
   <NavLink to="notifications" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton >
       <ListItemIcon>
@@ -53,14 +62,7 @@ export const mainListItems = (
     </ListItemButton>
   </NavLink>
 
-  <NavLink to="profile" style={{textDecoration: "none", color:"black"}}>
-    <ListItemButton>
-      <ListItemIcon>
-        <PersonIcon/>
-      </ListItemIcon>
-      <ListItemText primary="Profile" />
-    </ListItemButton>
-  </NavLink>
+ 
 
   <NavLink to="notifications" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton>

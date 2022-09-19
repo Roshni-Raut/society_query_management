@@ -12,6 +12,7 @@ import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonIcon from '@mui/icons-material/Person';
 import Badge from '@mui/material/Badge';
 import { NavLink } from 'react-router-dom';
 
@@ -24,7 +25,25 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItemButton>
+
+    <NavLink to="profile" style={{textDecoration: "none", color:"black"}}>
+    <ListItemButton>
+      <ListItemIcon>
+        <PersonIcon/>
+      </ListItemIcon>
+      <ListItemText primary="Profile" />
+    </ListItemButton>
+  </NavLink>
+
     </NavLink>
+    <NavLink to="createUser" style={{textDecoration: "none", color:"black"}}>
+    <ListItemButton>
+      <ListItemIcon>
+        <PersonAddIcon/>
+      </ListItemIcon>
+      <ListItemText primary="Create New User" />
+    </ListItemButton>
+  </NavLink>
 
     <NavLink to="query" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton >
@@ -35,7 +54,7 @@ export const mainListItems = (
     </ListItemButton>
   </NavLink>
 
-  <NavLink to="notifications" style={{textDecoration: "none", color:"black"}}>
+  <NavLink to="query" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton >
       <ListItemIcon>
         <CurrencyRupeeIcon />
@@ -53,14 +72,7 @@ export const mainListItems = (
     </ListItemButton>
   </NavLink>
 
-  <NavLink to="createUser" style={{textDecoration: "none", color:"black"}}>
-    <ListItemButton>
-      <ListItemIcon>
-        <PersonAddIcon/>
-      </ListItemIcon>
-      <ListItemText primary="Create New User" />
-    </ListItemButton>
-  </NavLink>
+ 
 
   <NavLink to="notifications" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton>

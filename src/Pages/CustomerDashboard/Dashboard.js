@@ -14,9 +14,14 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {mainListItems, secondaryListItems} from './NavList';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { List } from '@mui/material';
+import { CircularProgress, List } from '@mui/material';
 import { signOut } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { async } from '@firebase/util';
+import { collection, getDocs } from 'firebase/firestore';
+import { CurrentProfileProvider } from '../../Context/currentprofile.context';
 
 
 const drawerWidth = 240;
@@ -69,15 +74,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 function DashboardContent() {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
+  const [loading,setLoading]=useState(false);
   const nav=useNavigate();
-/*
-  useEffect(()=>{ // auto signout if user leaves
-    return()=>{
-      //add confirmation box
-      Logout()
-    }
-  },[])*/
+ 
 
   const Logout=()=>{
         signOut(auth).then(()=>{
@@ -92,7 +92,9 @@ function DashboardContent() {
     setOpen(!open);
   };
 
-  return (
+  return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'100vh'}}>
+  <CircularProgress />
+</Container>:
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <AppBar position="absolute" open={open}>
@@ -141,7 +143,7 @@ function DashboardContent() {
           sx={{
             backgroundColor: (theme) =>
               theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
+                ? theme.palette.grey[300]
                 : theme.palette.grey[900],
             flexGrow: 1,
             height: '100vh',
@@ -151,7 +153,9 @@ function DashboardContent() {
           <Container maxWidth="lg" sx={{ mt: 1, mb: 1 }}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                     {/*Nested routing*/}
-                    <Outlet/>
+                    <CurrentProfileProvider>
+                      <Outlet />
+                    </CurrentProfileProvider>
                 </Paper>
                 </Container>
         </Box>
