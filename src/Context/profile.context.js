@@ -14,7 +14,7 @@ export const ProfileProvider=({children})=>{
             if(user){
                 console.log(user.email)
                 const data={
-                    name: user.name,
+                    name: user.displayName,
                     uid: user.uid,
                     email: user.email        
                 }

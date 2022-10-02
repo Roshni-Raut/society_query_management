@@ -34,7 +34,7 @@ export const mainListItems = (
       <ListItemText primary="Query" />
     </ListItemButton>
   </NavLink>
-
+ 
   <NavLink to="profile" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton>
       <ListItemIcon>

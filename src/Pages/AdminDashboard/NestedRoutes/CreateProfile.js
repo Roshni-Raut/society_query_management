@@ -1,9 +1,10 @@
 import React, { useState} from 'react';
 import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth'
-import { Alert, Box, Button, Chip, CircularProgress, Container, Divider, Grid,  MenuItem, Snackbar, TextField} from '@mui/material';
+import { Alert, Box, Button, Checkbox, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid,  MenuItem, Snackbar, TextField, Typography} from '@mui/material';
 import {  setDoc ,doc, getDocs, collection} from "firebase/firestore"; 
 import { auth,db } from '../../../firebase';
 import { useEffect } from 'react';
+import Profiles from './Profiles';
 
 export const CreateProfile = () => {
   const [profile,setProfile]=useState({
@@ -13,13 +14,23 @@ export const CreateProfile = () => {
     flatno:"",profession:"",nationality:"",
     email:"",pass:"",cpass:""
   })
+  
   const arr=[101,102,103,104,105,106,107,108,109,110,201,202,203,204,205,206,207,208,209,210];
   const [success,setSuccess]=useState("")
   const [error,setError]= useState("")
+  const [inputError,setInputError]= useState({
+    fname:"",lname:"",mname:"",
+    oname:"",oemail:"",ocontact:"",
+    phone:"",phone1:"",adhaar:"",
+    fmember:"",email:""})
+  const [owner,setOwner]=useState({oname:"",oemail:"",ocontact:""});
   const [loading,setLoading]= useState(false)
   const [flatno,setFlatno]=useState([])
   const color="#645CAA"
-  
+  const validEmail=/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  const [isOwner,setisOwner]=useState(false) 
+  const [open,setOpen]=useState(false)
+
   async function fetch(){
     console.log("fetch")
     const querySnapshot = await getDocs(collection(db, "Profiles"));
@@ -29,7 +40,6 @@ export const CreateProfile = () => {
     });
     setFlatno(arr1)
   }
-
   useEffect(()=>{
     setLoading(true)
     fetch();
@@ -40,12 +50,14 @@ export const CreateProfile = () => {
     console.log("createprofile:rendering")
     setLoading(false)
   },[])
-
   const Save=()=>{
     try{
-      localStorage.setItem("profile",JSON.stringify(profile))
+      localStorage.setItem("profile",JSON.stringify({...profile,flatno:"",pass:"",cpass:""}))
+      setSuccess("Saved")
+      setTimeout(()=>setSuccess(""),6000)
     }catch(error){
-      setError(error);
+      setError(error.code);
+      setTimeout(()=>setError(""),6000)
     }
   }
   const cancel=()=>{
@@ -57,9 +69,53 @@ export const CreateProfile = () => {
     localStorage.removeItem("profile")
   }
   const handleInput=(e)=>{
+    e.preventDefault();
     const name=e.target.name;
     const value=e.target.value;
-    
+    switch(name){
+      case 'fname': if(/[^A-Z]/i.test(value)===true)
+                      setInputError({...inputError,fname:"invalid value"})
+                    else
+                    setInputError({...inputError,fname:""})
+                    break;
+      case 'mname': if(/[^A-Z]/i.test(value)===true)
+                      setInputError({...inputError,mname:"invalid input"})
+                    else
+                    setInputError({...inputError,mname:""})
+                    break; 
+      case 'lname': if(/[^A-Z]/i.test(value)===true)
+                      setInputError({...inputError,lname:"invalid input"})
+                    else
+                      setInputError({...inputError,lname:""})
+                    break;      
+      case 'phone': if(/[^0-9]/.test(value)===true || value.length!==10)
+                      setInputError({...inputError,phone:"invalid input"})
+                    else
+                      setInputError({...inputError,phone:""})
+                    break;    
+      case 'phone1': if(/[^0-9]/.test(value)===true || value.length!==10)
+                      setInputError({...inputError,phone1:"invalid input"})
+                    else
+                      setInputError({...inputError,phone1:""})
+                    break; 
+      case 'adhaar': if(/[^0-9]/.test(value)===true || value.length!==12)
+                      setInputError({...inputError,adhaar:"invalid input"})
+                    else
+                      setInputError({...inputError,adhaar:""})
+                    break; 
+      case 'fmember': if(/[^0-9]/.test(value)===true)
+                      setInputError({...inputError,fmember:"invalid input"})
+                    else
+                      setInputError({...inputError,fmember:""})
+                    break;       
+      case 'email': if(validEmail.test(value)===false)
+                      setInputError({...inputError,email:"invalid input"})
+                    else
+                      setInputError({...inputError,email:""})
+                    break;          
+      default: console.log(name)
+        break;
+    }
     setProfile({...profile,[name]:value});
   }
   const createProfile=(userCredential)=>{
@@ -87,9 +143,13 @@ export const CreateProfile = () => {
         profession:profile.profession,
         nationality:profile.nationality,
         email: userCredential.email,
+        owner:isOwner?null:{name: owner.oname,
+          email:owner.oemail,
+          contact:owner.ocontact},
         time: today
       };
       await setDoc(doc(db, "Profiles", userCredential.uid), data);
+      await setDoc(doc(db, "Query", userCredential.uid), {queries:[]});
       setSuccess("login Created successfully");
       setTimeout(()=>{setSuccess("")},6000)
     })
@@ -98,13 +158,21 @@ export const CreateProfile = () => {
       setTimeout(()=>{setError("")},6000)
     });
   }
-
   const register=(e)=>{
     e.preventDefault();
     setLoading(true)
     setError("")
+    for(let i in inputError){
+      if(inputError[i]!==""){
+        setError("Correct the red Text field")
+        setTimeout(()=>setError(""),6000)
+        setLoading(false)
+        return;
+      }
+    }
     if(profile.pass!==profile.cpass){
       setError("Password doesn't match");
+      setTimeout(()=>setError(""),6000)
     }
     else
     {
@@ -121,6 +189,30 @@ export const CreateProfile = () => {
       });
     }
     setLoading(false)
+  }
+
+  const handleOwner=(e)=>{
+    const name=e.target.name;
+    const value=e.target.value;
+    switch(name){
+      case 'oname':if(/[^a-z \s \.]/i.test(value))
+                      setInputError({...inputError,[name]:"invalid input"})
+                    else
+                      setInputError({...inputError,[name]:""})
+                    break; 
+      case 'oemail':if(validEmail.test(value)===false)
+                      setInputError({...inputError,[name]:"invalid input"})
+                    else
+                      setInputError({...inputError,[name]:""})
+                    break; 
+      case 'ocontact':if(/[^0-9]/i.test(value) || value.length!==10 )
+                      setInputError({...inputError,[name]:"invalid input"})
+                    else
+                      setInputError({...inputError,[name]:""})
+                    break;               
+      default: 
+    }
+    setOwner({...owner,[name]:value})
   }
 
   return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'100vh'}}>
@@ -140,50 +232,172 @@ export const CreateProfile = () => {
         </Alert>
       </Snackbar>
 
-      <Grid item xs={12}>
-        <Box component="form" onSubmit={register} sx={{mt:1}} >
-        
-            <Divider ><Chip label="Create New Profile" color="primary"/></Divider>
+      <Button size="small" onClick={()=>setOpen(true)}sx={{backgroundColor:color}}variant="contained">Create new User</Button>
+      
+      <Dialog open={open} onClose={()=>setOpen(false)} fullWidth maxWidth="md">
+      <DialogTitle>Create User</DialogTitle>
+        <Divider color="black" variant="middle"></Divider>
 
-
-            <Grid container spacing={3} justifyContent="center" sx={{mb:2,mt:1}}>
+        <DialogContent>
+          
+        </DialogContent>
+        <Grid item xs={12}>
+        <Box component="form" onSubmit={register} >
+            <Grid container spacing={3} justifyContent="center" >
               <Grid item >
-                <TextField  value={profile.fname} label="Firstname" name="fname" size="small" type="text" onChange={handleInput} required/>
+                <TextField  
+                    value={profile.fname} 
+                    label="Firstname" 
+                    name="fname" 
+                    size="small" 
+                    type="text" 
+                    onChange={handleInput} 
+                    required
+                    error={inputError.fname!==""}
+                    helperText={inputError.fname}
+                    />
               </Grid>
               <Grid item >
-                <TextField  value={profile.mname} label="Middlename" name="mname" size="small" type="text" onChange={handleInput} required/>
+                <TextField  
+                    value={profile.mname} 
+                    label="Middlename" 
+                    name="mname" 
+                    size="small" 
+                    type="text" 
+                    onChange={handleInput} 
+                    required
+                    error={inputError.mname!==""}
+                    helperText={inputError.mname}
+                    />
               </Grid>
               <Grid item>
-                <TextField  value={profile.lname} label="Lastname" name="lname" size="small" type="text" onChange={handleInput} required/>
+                <TextField  
+                  value={profile.lname} 
+                  label="Lastname" 
+                  name="lname" 
+                  size="small" 
+                  type="text" 
+                  onChange={handleInput} 
+                  required
+                  error={inputError.lname!==""}
+                  helperText={inputError.lname}
+                  />
               </Grid>
             </Grid>
 
+            <Grid display="flex" justifyContent="center" alignItems="center">
+            <Checkbox color="secondary" size="small" 
+              onChange={(e)=>e.target.checked?setisOwner(true):setisOwner(false)}/>
+            <Typography variant="caption" >Owner name same as above </Typography>
+            </Grid>
 
-
+            {!isOwner && 
+            <Grid container spacing={3} justifyContent="center" sx={{mb:2}}>
+              <Grid item >
+                <TextField  
+                    value={owner.oname} 
+                    label="Enter Full Name" 
+                    name="oname" 
+                    size="small" 
+                    type="text" 
+                    onChange={handleOwner} 
+                    required
+                    error={inputError.oname!==""}
+                    helperText={inputError.oname}
+                    />
+              </Grid>
+              <Grid item >
+                <TextField  
+                    value={owner.oemail} 
+                    label="Email Id" 
+                    name="oemail" 
+                    size="small" 
+                    type="text" 
+                    onChange={handleOwner} 
+                    required
+                    error={inputError.oemail!==""}
+                    helperText={inputError.oemail}
+                    />
+              </Grid>
+              <Grid item>
+                <TextField  
+                  value={owner.ocontact} 
+                  label="Contact" 
+                  name="ocontact" 
+                  size="small" 
+                  type="text" 
+                  onChange={handleOwner} 
+                  required
+                  error={inputError.ocontact!==""}
+                  helperText={inputError.ocontact}
+                  />
+              </Grid>
+            </Grid>}
 
             <Grid container spacing={3} justifyContent="center" sx={{mb:2}}>
               <Grid item >
-                <TextField error={false} value={profile.phone} label="Phone no" name="phone" size="small" type="text" onChange={handleInput} required/>
+                <TextField  
+                value={profile.phone} 
+                label="Phone no" 
+                name="phone" 
+                size="small" 
+                type="text" 
+                onChange={handleInput} 
+                required
+                error={inputError.phone!==""}
+                helperText={inputError.phone}
+                />
               </Grid>
               <Grid item >
-                <TextField error={false} value={profile.phone1} label="Alternate Phone no."name="phone1" size="small" type="text" onChange={handleInput} required/>
+                <TextField  
+                  value={profile.phone1} 
+                  label="Alternate Phone no."
+                  name="phone1" 
+                  size="small" 
+                  type="text" 
+                  onChange={handleInput} 
+                  required
+                  error={inputError.phone1!==""}
+                  helperText={inputError.phone1}
+                  />
               </Grid>
               <Grid item>
-                <TextField error={false} value={profile.adhaar} label="Adhaar number" name="adhaar" size="small" type="text" onChange={handleInput} required/>
+                <TextField 
+                value={profile.adhaar} 
+                label="Adhaar number" 
+                name="adhaar" 
+                size="small" 
+                type="text" 
+                onChange={handleInput} 
+                required
+                error={inputError.adhaar!==""}
+                helperText={inputError.adhaar}
+                />
               </Grid>
             </Grid>
 
 
-            <Divider variant="middle" ><Chip label="Personal Details"variant="outlined" color="primary"/></Divider>
 
 
+            <Divider variant="middle" ><Chip label="Personal Details"variant="outlined" color="primary" style={{color:color,borderColor:color}}/></Divider>
 
             <Grid container spacing={3} justifyContent="center" sx={{mb:2,mt:0}}>
               <Grid item>
-                <TextField error={false} label="Total Family Member" size="small" name="fmember" type="text" onChange={handleInput} value={profile.fmember}required/>
+                <TextField 
+                    label="Total Family Member" 
+                    size="small" 
+                    name="fmember" 
+                    type="text" 
+                    onChange={handleInput} 
+                    value={profile.fmember}
+                    required
+                    error={inputError.fmember!==""}
+                    helperText={inputError.fmember}
+                    />
               </Grid>
               <Grid item>
-              <TextField label="Gender" size="small" defaultValue="" sx={{minWidth:'225px'}} name="gender" onChange={handleInput} value={profile.gender||''} required select>
+              <TextField 
+                  label="Gender" size="small" defaultValue="" sx={{minWidth:'225px'}} name="gender" onChange={handleInput} value={profile.gender||''} required select>
                 <MenuItem value="Female">Female</MenuItem>
                 <MenuItem value="Male">Male</MenuItem>
               </TextField>
@@ -192,9 +406,6 @@ export const CreateProfile = () => {
                 <TextField error={false} label="Date of Birth" size="small" type="date" name="dob" sx={{minWidth:'225px'}} onChange={handleInput} value={profile.dob||''} InputLabelProps={{shrink: true, }} required/>
               </Grid>
             </Grid>
-
-
-
 
             <Grid container spacing={3} justifyContent="center" sx={{mb:2}}>
               <Grid item>
@@ -218,13 +429,23 @@ export const CreateProfile = () => {
             </Grid>
                 
 
-            <Divider variant="middle" ><Chip label="Login Details" variant="outlined" color="primary"/></Divider>
 
 
+            <Divider variant="middle" ><Chip label="Login Details" variant="outlined" color="primary" style={{color:color,borderColor:color}}/></Divider>
 
             <Grid container spacing={3} justifyContent="center" sx={{mb:2,mt:0}}>
               <Grid item >
-                <TextField size="small" label="Email address" type="email" name="email" onChange={handleInput} value={profile.email} required/>
+                <TextField 
+                    size="small" 
+                    label="Email address" 
+                    type="email" 
+                    name="email" 
+                    onChange={handleInput} 
+                    value={profile.email} 
+                    required
+                    error={inputError.email!==""}
+                    helperText={inputError.email}
+                    />
               </Grid>
               <Grid item>
                 <TextField size="small" label="Password" type="password" name="pass" onChange={handleInput} value={profile.pass||''} autoComplete="off" required/>
@@ -234,10 +455,8 @@ export const CreateProfile = () => {
               </Grid>
             </Grid>
 
-
-
-
-            <Grid container justifyContent="center" spacing={3} sx={{mt:1,mb:3}} >
+            <DialogActions sx={{m:2}}>
+            <Grid container justifyContent="center" spacing={3} >
               <Grid item >
                 <Button size="small" disabled={loading} type="submit"  sx={{backgroundColor:color}} variant="contained" >Create Profile</Button>
               </Grid>
@@ -245,13 +464,18 @@ export const CreateProfile = () => {
                 <Button size="small" disabled={loading} type="button"  sx={{backgroundColor:color}} variant="contained" onClick={Save}>Save</Button>
               </Grid>
               <Grid item >
-                <Button size="small" disabled={loading} type="reset"  sx={{backgroundColor:color}} variant="contained"  onClick={cancel}>Cancel</Button>
+                <Button size="small" disabled={loading} type="reset"  sx={{backgroundColor:color}} variant="contained"  onClick={()=>{setOpen(false);cancel()}}>Cancel</Button>
               </Grid>
             </Grid>
-            
+            </DialogActions>
           </Box>
       </Grid>
-            
+  
+    </Dialog>
+
+      
+
+      <Profiles/>  
     </Container>
   </div>
   )

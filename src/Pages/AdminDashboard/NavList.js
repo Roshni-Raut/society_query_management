@@ -25,6 +25,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItemButton>
+    </NavLink>
 
     <NavLink to="profile" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton>
@@ -35,7 +36,6 @@ export const mainListItems = (
     </ListItemButton>
   </NavLink>
 
-    </NavLink>
     <NavLink to="createUser" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton>
       <ListItemIcon>

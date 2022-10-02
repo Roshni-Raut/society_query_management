@@ -19,13 +19,16 @@ import { UserProfile } from './Pages/CustomerDashboard/NestedRoutes/UserProfile'
 import { CreateProfile } from './Pages/AdminDashboard/NestedRoutes/CreateProfile';
 import Profiles from './Pages/AdminDashboard/NestedRoutes/Profiles';
 import { AdminProfile } from './Pages/AdminDashboard/NestedRoutes/AdminProfile';
+import { PublicRoute } from './Routes/PublicRoute';
 
 function App() {
   return (
     <ProfileProvider>
      <BrowserRouter>
      <Routes>
-      <Route path="/" element={<SignIn/>}></Route>
+      <Route element={<PublicRoute/>}>
+        <Route path="/" element={<SignIn/>}></Route>
+      </Route>
       <Route element={<ProtectedRoute/>}>
         <Route path="customer-dashboard" element={<Dashboard />}>
           <Route index element={<History/>}/>
@@ -38,7 +41,7 @@ function App() {
       <Route element={<AdminRoute/>}>
         <Route path="admin-dashboard" element={<ADashboard />}>
           <Route index element={<AHistory/>}/>
-          <Route path="history" element={<Profiles/>} />
+          <Route path="history" element={<History/>} />
           <Route path="query" element={<AQuery/>} />
           <Route path="notifications" element={<ANotifications />} />
           <Route path="createUser" element={<CreateProfile />} />
