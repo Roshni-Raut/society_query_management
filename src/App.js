@@ -20,6 +20,7 @@ import { CreateProfile } from './Pages/AdminDashboard/NestedRoutes/CreateProfile
 import Profiles from './Pages/AdminDashboard/NestedRoutes/Profiles';
 import { AdminProfile } from './Pages/AdminDashboard/NestedRoutes/AdminProfile';
 import { PublicRoute } from './Routes/PublicRoute';
+import Maintenance from './Pages/CustomerDashboard/NestedRoutes/Maintenance';
 
 function App() {
   return (
@@ -36,16 +37,18 @@ function App() {
           <Route path="query" element={<Query/>} />
           <Route path="notifications" element={<Notifications />} />
           <Route path="profile" element={<UserProfile/>} />
+          <Route path="maintenance" element={<Maintenance/>} />
         </Route>
       </Route>
       <Route element={<AdminRoute/>}>
         <Route path="admin-dashboard" element={<ADashboard />}>
           <Route index element={<AHistory/>}/>
-          <Route path="history" element={<History/>} />
+          <Route path="history" element={<AHistory/>} />
           <Route path="query" element={<AQuery/>} />
           <Route path="notifications" element={<ANotifications />} />
           <Route path="createUser" element={<CreateProfile />} />
           <Route path="profile" element={<AdminProfile />} />
+          <Route path="maintenance" element={<Maintenance/>} />
         </Route>
       </Route>
      </Routes>

@@ -12,7 +12,6 @@ export const Query = () => {
   const [error,setError]=useState()
   const [open,setOpen]=useState(false)
   const query=useRef({subject:"",priority:"",query:""})
-  var count=useRef(0);
   const color="#645CAA"
   const {loading,queries}=useProfile()
 
@@ -51,10 +50,6 @@ export const Query = () => {
     setError("removed ");
     setTimeout(()=>{setError("")},3000)
   }
-  useEffect(()=>{
-    count.current+=1
-    console.log(count)
-  })
   const handleInput=(e)=>{
     const name=e.target.name;
     const value=e.target.value;

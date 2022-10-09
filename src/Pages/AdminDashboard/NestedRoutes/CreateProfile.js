@@ -32,7 +32,6 @@ export const CreateProfile = () => {
   const [open,setOpen]=useState(false)
 
   async function fetch(){
-    console.log("fetch")
     const querySnapshot = await getDocs(collection(db, "Profiles"));
     let arr1=[];
     querySnapshot.forEach((doc) => {
@@ -150,6 +149,7 @@ export const CreateProfile = () => {
       };
       await setDoc(doc(db, "Profiles", userCredential.uid), data);
       await setDoc(doc(db, "Query", userCredential.uid), {queries:[]});
+      await setDoc(doc(db, "Notifications", userCredential.uid), {notifications:[]});
       setSuccess("login Created successfully");
       setTimeout(()=>{setSuccess("")},6000)
     })

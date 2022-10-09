@@ -1,7 +1,8 @@
-import { Alert, Box, Button, Chip, CircularProgress, Container, Divider, Grid, Snackbar, TextField} from '@mui/material';
+import { Alert, Avatar, Box, Button, Chip, CircularProgress, Container, Divider, Grid, Snackbar, TextField} from '@mui/material';
 import { sendPasswordResetEmail, updateProfile } from 'firebase/auth';
 import React,{ useState} from 'react'
-import { auth } from '../../../firebase';
+import { auth, color } from '../../../firebase';
+import AvatarBtn from './AvatarBtn';
 
 export const AdminProfile = () => {
   const profile=auth.currentUser;
@@ -9,7 +10,7 @@ export const AdminProfile = () => {
   const [success,setSuccess]=useState("")
   
   const [error,setError]= useState("")
-  const color="#645CAA"
+  
   
   const changePass=()=>{
     sendPasswordResetEmail(auth, profile.email)
@@ -69,11 +70,12 @@ export const AdminProfile = () => {
       </Snackbar>
 
     <Grid item xs={12}>
-      <Box component="form" sx={{mt:1,mx:5}} >
+      <Box component="form" sx={{mt:1,mx:5}}>
           
-
           <Divider ><Chip label="Admin's Profile" color="primary" style={{backgroundColor:color}}/></Divider>
-            <Grid item xs={12} sx={{mx:5,m:2,mt:5}}>
+            <AvatarBtn profile={profile} />
+
+            <Grid item xs={12} sx={{mx:5,m:2,mt:2}}>
               {console.log(profile)}
               <TextField  label="Name" fullWidth size="small" type="text" value={name||profile.displayName||''} onChange={(e)=>setName(e.target.value)} />
             </Grid>

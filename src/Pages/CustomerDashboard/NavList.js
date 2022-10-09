@@ -44,12 +44,12 @@ export const mainListItems = (
     </ListItemButton>
   </NavLink>
   
-  <NavLink to="notifications" style={{textDecoration: "none", color:"black"}}>
+  <NavLink to="maintenance" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton >
       <ListItemIcon>
         <CurrencyRupeeIcon />
       </ListItemIcon>
-      <ListItemText primary="Maintainence" />
+      <ListItemText primary="Maintenance" />
     </ListItemButton>
   </NavLink>
 

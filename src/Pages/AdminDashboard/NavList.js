@@ -54,7 +54,7 @@ export const mainListItems = (
     </ListItemButton>
   </NavLink>
 
-  <NavLink to="query" style={{textDecoration: "none", color:"black"}}>
+  <NavLink to="maintenance" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton >
       <ListItemIcon>
         <CurrencyRupeeIcon />
