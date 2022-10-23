@@ -1,13 +1,11 @@
-import { async } from '@firebase/util'
-import { Alert, Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, Snackbar } from '@mui/material'
+import { Alert, Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle,  Grid, Snackbar } from '@mui/material'
 import { updateProfile } from 'firebase/auth'
-import { doc, updateDoc } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import React from 'react'
 import { useRef } from 'react'
 import { useState } from 'react'
 import AvatarEditor from 'react-avatar-editor'
-import { auth, color, db, storage } from '../../../firebase'
+import { auth, color, storage } from '../../../firebase'
 
 const AvatarBtn = ({profile}) => {
     const [open,setOpen]=useState(false)    
@@ -79,6 +77,7 @@ const AvatarBtn = ({profile}) => {
                 src={profile.photoURL}
                 sx={{ width: 150, height: 150 }}
               />
+              {console.log(profile)}
             </Grid>
           <Grid item xs={12} sx={{mx:5,mt:1,display:"flex",justifyContent:"center"}}>
               <label htmlFor='avatar-upload' className='btn btn-secondary btn-sm'>

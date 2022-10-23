@@ -1,10 +1,12 @@
 import React, { useState} from 'react';
 import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth'
-import { Alert, Box, Button, Checkbox, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid,  MenuItem, Snackbar, TextField, Typography} from '@mui/material';
+import { Alert, Box, Button, Checkbox, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid,  IconButton,  Input,  InputAdornment,  InputLabel,  MenuItem, Snackbar, TextField, Typography} from '@mui/material';
 import {  setDoc ,doc, getDocs, collection} from "firebase/firestore"; 
 import { auth,db } from '../../../firebase';
 import { useEffect } from 'react';
 import Profiles from './Profiles';
+import { useAllProfile } from '../../../Context/admin.context';
+import SearchIcon from '@mui/icons-material/Search';
 
 export const CreateProfile = () => {
   const [profile,setProfile]=useState({
@@ -23,19 +25,20 @@ export const CreateProfile = () => {
     oname:"",oemail:"",ocontact:"",
     phone:"",phone1:"",adhaar:"",
     fmember:"",email:""})
-  const [owner,setOwner]=useState({oname:"",oemail:"",ocontact:""});
-  const [loading,setLoading]= useState(false)
-  const [flatno,setFlatno]=useState([])
-  const color="#645CAA"
-  const validEmail=/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-  const [isOwner,setisOwner]=useState(false) 
-  const [open,setOpen]=useState(false)
+    const [owner,setOwner]=useState({oname:"",oemail:"",ocontact:""});
+    const [load,setLoading]= useState(false)
+    const [flatno,setFlatno]=useState([])
+    const color="#645CAA"
+    const validEmail=/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    const [isOwner,setisOwner]=useState(false) 
+    const [open,setOpen]=useState(false)
+    const {profiles,loading}=useAllProfile();
+    const [search,setSearch]=useState()
 
   async function fetch(){
-    const querySnapshot = await getDocs(collection(db, "Profiles"));
     let arr1=[];
-    querySnapshot.forEach((doc) => {
-      arr1.push(doc.data().flatno);
+    profiles.forEach((doc) => {
+      arr1.push(doc.flatno);
     });
     setFlatno(arr1)
   }
@@ -46,7 +49,6 @@ export const CreateProfile = () => {
       setProfile(JSON.parse(localStorage.getItem("profile")));
       console.log()
     }
-    console.log("createprofile:rendering")
     setLoading(false)
   },[])
   const Save=()=>{
@@ -190,7 +192,6 @@ export const CreateProfile = () => {
     }
     setLoading(false)
   }
-
   const handleOwner=(e)=>{
     const name=e.target.name;
     const value=e.target.value;
@@ -214,7 +215,12 @@ export const CreateProfile = () => {
     }
     setOwner({...owner,[name]:value})
   }
-
+  const searching=(e)=>{
+    const word=e.target.value.toLowerCase()
+      console.log(word)
+      setSearch(profiles.filter(x=>(x.fname+x.lname+x.mname).toLowerCase().match(word) ))
+    console.log(search)
+  }
   return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'100vh'}}>
   <CircularProgress />
 </Container>:
@@ -233,14 +239,25 @@ export const CreateProfile = () => {
       </Snackbar>
 
       <Button size="small" onClick={()=>setOpen(true)}sx={{backgroundColor:color}}variant="contained">Create new User</Button>
+      <div style={{float:'right'}}>
+
+      <Input
+            id="standard-adornment-password"
+            type="text"
+            placeholder='Search'
+            onChange={searching}
+            endAdornment={
+              <InputAdornment position="end">
+                  <SearchIcon/>
+              </InputAdornment>
+            }
+            />
+      </div>
       
       <Dialog open={open} onClose={()=>setOpen(false)} fullWidth maxWidth="md">
       <DialogTitle>Create User</DialogTitle>
-        <Divider color="black" variant="middle"></Divider>
+        <Divider color="black" variant="middle" sx={{marginBottom:1}}></Divider>
 
-        <DialogContent>
-          
-        </DialogContent>
         <Grid item xs={12}>
         <Box component="form" onSubmit={register} >
             <Grid container spacing={3} justifyContent="center" >
@@ -472,10 +489,8 @@ export const CreateProfile = () => {
       </Grid>
   
     </Dialog>
-
-      
-
-      <Profiles/>  
+        {/*if search is empty then send profiles else search */}
+      <Profiles profiles={search?search:profiles} loading={load}/>  
     </Container>
   </div>
   )

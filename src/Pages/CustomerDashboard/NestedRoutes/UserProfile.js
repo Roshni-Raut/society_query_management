@@ -4,6 +4,7 @@ import {  doc,   updateDoc } from 'firebase/firestore';
 import React,{ useState} from 'react'
 import { useProfile } from '../../../Context/currentprofile.context';
 import { auth, db } from '../../../firebase';
+import AvatarBtn from '../../AdminDashboard/NestedRoutes/AvatarBtn';
 
 export const UserProfile = () => {
   const {profile,loading}=useProfile()
@@ -78,6 +79,7 @@ export const UserProfile = () => {
           
 
           <Divider ><Chip label={`${profile.fname}'s Profile`} color="primary"/></Divider>
+          <AvatarBtn profile={auth.currentUser}/>
           <Grid container spacing={3} justifyContent="center" sx={{mb:2,mt:1}}>
             <Grid item >
               <TextField  label="Firstname" size="small" type="text" value={profile.fname||''} variant="filled"/>

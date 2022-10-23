@@ -53,9 +53,7 @@ export const Query = () => {
   const handleInput=(e)=>{
     const name=e.target.name;
     const value=e.target.value;
-    console.log(name,value)
     query.current.value=({...query.current.value,[name]:value})
-    console.log(query.current.value)
   }
   const deleteQuery=async(data)=>{
     console.log(data)

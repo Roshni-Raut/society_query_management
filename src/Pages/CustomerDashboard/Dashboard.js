@@ -14,15 +14,12 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {mainListItems, secondaryListItems} from './NavList';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { CircularProgress, List } from '@mui/material';
+import { Button, CircularProgress, ClickAwayListener, List, Tooltip, tooltipClasses } from '@mui/material';
 import { signOut } from 'firebase/auth';
-import { auth, db } from '../../firebase';
-import { useEffect } from 'react';
+import { auth } from '../../firebase';
 import { useState } from 'react';
-import { async } from '@firebase/util';
-import { collection, getDocs } from 'firebase/firestore';
 import { CurrentProfileProvider } from '../../Context/currentprofile.context';
-
+import NoticeTooltip from './NestedRoutes/NoticeTooltip';
 
 const drawerWidth = 240;
 const color="#645CAA";
@@ -91,6 +88,7 @@ function DashboardContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  
 
   return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'100vh'}}>
   <CircularProgress />
@@ -113,6 +111,9 @@ function DashboardContent() {
             <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
               Dashboard
             </Typography>
+            <CurrentProfileProvider>
+              <NoticeTooltip/>
+            </CurrentProfileProvider>
             <IconButton color="inherit" onClick={Logout}>
                 <ExitToAppIcon />
             </IconButton>

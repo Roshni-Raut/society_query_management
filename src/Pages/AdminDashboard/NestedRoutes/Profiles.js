@@ -1,35 +1,22 @@
 import * as React from 'react';
 import { useAllProfile } from '../../../Context/admin.context';
-import { Chip, CircularProgress, Grid } from '@mui/material';
+import { CircularProgress, IconButton, Menu, MenuItem } from '@mui/material';
 import { Container } from '@mui/system';
-import { admin } from '../../../firebase';
 import { useState } from 'react';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-
-export default function Profiles() {
-  const {profiles,loading}=useAllProfile();
-  const [filteredProfiles,setFilter]=useState()
-
-  const addFilter=(e)=>{
-    const name=e.target.name;
-    setFilter(profiles)
-    console.log(name)
-    if(name==="name"){
-      setFilter(filteredProfiles.sort((x,y)=> x.name-y.name))
-    }
-    else
-    setFilter(filteredProfiles.sort((x,y)=> x.flatno-y.flatno))
-  }
+export default function Profiles({profiles,loading}) {
+  const [anchorEl,setAnchorEl]=useState(null)
+  const open=Boolean(anchorEl)
 
   return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'80vh'}}>
   <CircularProgress /> </Container>:
   <div>
-    <Grid container spacing={3} justifyContent="right" sx={{mb:2,mt:0}}>
-      <Chip label="Name" name="name" onClick={addFilter} />
-      <Chip label="Flat number" name="flatno" variant="outlined" onClick={addFilter} />
-    </Grid>
 
-    <table className="table table-hover text-center">
+    <table className="table table-hover text-center mt-2">
     <thead className='table-secondary'>
       <tr>
         <th scope="col">#</th>
@@ -39,12 +26,12 @@ export default function Profiles() {
         <th scope="col">Gender</th>
         <th scope="col">Nationality</th>
         <th scope="col">Family member</th>
-        <th scope="col">Residence since</th>
+        <th scope="col">#</th>
       </tr>
     </thead>
     <tbody>
       
-      {profiles.map((x,i)=>(
+      {profiles && profiles.map((x,i)=>(
         <tr key={i}>
         <th scope="row">{i+1}</th>
         <td>{x.fname+" "+x.mname+" "+x.lname}</td>
@@ -53,15 +40,34 @@ export default function Profiles() {
         <td>{x.gender}</td>
         <td>{x.nationality}</td>
         <td>{x.fmember}</td>
-        <td>{parseInt(new Date().getFullYear())-parseInt(x.time.split("-")[2])}</td>
+        <td> 
+          <IconButton onClick={(e)=>setAnchorEl(e.currentTarget)} >
+            <MoreVertIcon />
+          </IconButton>
+      </td>
       </tr>
       ))
 
       }
       
-      
     </tbody>
   </table>
+  <Menu
+    id="long-menu"
+    anchorEl={anchorEl}
+    open={open}
+    onClose={()=>setAnchorEl(null)}
+    >
+        <MenuItem onClick={()=>setAnchorEl(null)}>
+         <RemoveRedEyeIcon color="action" sx={{marginRight:1}}/>  View
+        </MenuItem>    
+        <MenuItem onClick={()=>setAnchorEl(null)}>
+          <EditIcon color="action"sx={{marginRight:1}}/>Edit
+        </MenuItem>
+        <MenuItem onClick={()=>setAnchorEl(null)}>
+          <DeleteIcon color="action"sx={{marginRight:1}}/>Delete
+        </MenuItem>
+  </Menu>
   </div>
   );
 }

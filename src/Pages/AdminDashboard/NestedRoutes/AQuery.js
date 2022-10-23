@@ -59,10 +59,10 @@ const update=async(e)=>{
     subject:q.subject,
     msg:`Status changed from ${q.status} to ${e.target.value}`,
     createdAt:Timestamp.now()
-  }/*
+  }
   await updateDoc(doc(db, "Notifications", uid), {
     notifications: arrayUnion(data)
-  });*/
+  });
   q.status=e.target.value
   await updateDoc(doc(db, "Query", uid), {
     queries: arrayUnion(q)

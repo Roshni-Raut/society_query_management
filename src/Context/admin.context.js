@@ -18,18 +18,23 @@ export const AllProfileProvider=({children})=>{
         var date=new Intl.DateTimeFormat('en-US', options ).format(dateString)
         return date.toString()
       }
-    async function fetch(){
+
+    useEffect(()=>{
+        setLoading(true)
         /* Getting all the profiles*/ 
         onSnapshot(collection(db, "Profiles"),collection=>{
+            setLoading(true);
             const p=[]
             collection.forEach(doc=>{
                 p.push(doc.data())
             })
-            setProfile(p)
+            setProfile(p) 
+            setLoading(false);
         })
 
         /* Getting all the queries */     
         onSnapshot(collection(db, "Query"),(collection) => {
+            setLoading(true);
            let q=[]
             collection.forEach((doc)=>{
                 const arr=doc.data().queries
@@ -63,22 +68,20 @@ export const AllProfileProvider=({children})=>{
                 l.push(l1)
             }
             setLine(l)
+            setLoading(false);
         });
 
         /* Getting all the Notifications*/ 
         onSnapshot(collection(db, "Notifications"),collection=>{
+            setLoading(true);
             const n=[]
             collection.forEach(doc=>{
                 n.push(doc.data())
             })
             setNotificaitons(n)
+            setLoading(false);
         })
-    }
-    
-    useEffect(()=>{
-        setLoading(true);
-        fetch()
-        setLoading(false);
+        setLoading(false)
     },[]);
 
     return <AllProfileContext.Provider value={{loading,profiles,queries,count,line,notifications}}>{children}</AllProfileContext.Provider>

@@ -17,7 +17,6 @@ import ADashboard from './Pages/AdminDashboard/ADashboard';
 import { AdminRoute } from './Routes/AdminRoute';
 import { UserProfile } from './Pages/CustomerDashboard/NestedRoutes/UserProfile';
 import { CreateProfile } from './Pages/AdminDashboard/NestedRoutes/CreateProfile';
-import Profiles from './Pages/AdminDashboard/NestedRoutes/Profiles';
 import { AdminProfile } from './Pages/AdminDashboard/NestedRoutes/AdminProfile';
 import { PublicRoute } from './Routes/PublicRoute';
 import Maintenance from './Pages/CustomerDashboard/NestedRoutes/Maintenance';

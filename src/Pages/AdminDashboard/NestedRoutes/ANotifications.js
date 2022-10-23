@@ -82,9 +82,6 @@ export const ANotifications = () => {
       {success && <Alert variant="filled" severity="success" sx={{position:'absolute', minWidth:'220px'}}>{success}</Alert>}
       {error && <Alert variant="filled" severity="error" sx={{position:'absolute', minWidth:'220px'}}>{error}</Alert>}
      </Grid>
-    <Grid container justifyContent="flex-end" sx={{mb:2,mt:2,mr:4}}>
-    <Button size="small" onClick={()=>setOpen(true)} type="button" sx={{backgroundColor:color}} variant="contained" >Create Notification</Button>
-    </Grid>
     
     <Dialog open={open} onClose={()=>setOpen(false)} fullWidth>
       <DialogTitle>Send your Query</DialogTitle>
