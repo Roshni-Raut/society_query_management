@@ -20,6 +20,8 @@ import { CreateProfile } from './Pages/AdminDashboard/NestedRoutes/CreateProfile
 import { AdminProfile } from './Pages/AdminDashboard/NestedRoutes/AdminProfile';
 import { PublicRoute } from './Routes/PublicRoute';
 import Maintenance from './Pages/CustomerDashboard/NestedRoutes/Maintenance';
+import AEvent from './Pages/AdminDashboard/NestedRoutes/AEvent';
+import Event from './Pages/CustomerDashboard/NestedRoutes/Event';
 
 function App() {
   return (
@@ -37,6 +39,7 @@ function App() {
           <Route path="notifications" element={<Notifications />} />
           <Route path="profile" element={<UserProfile/>} />
           <Route path="maintenance" element={<Maintenance/>} />
+          <Route path="event" element={<Event/>} />
         </Route>
       </Route>
       <Route element={<AdminRoute/>}>
@@ -48,6 +51,7 @@ function App() {
           <Route path="createUser" element={<CreateProfile />} />
           <Route path="profile" element={<AdminProfile />} />
           <Route path="maintenance" element={<Maintenance/>} />
+          <Route path="event" element={<AEvent/>} />
         </Route>
       </Route>
      </Routes>

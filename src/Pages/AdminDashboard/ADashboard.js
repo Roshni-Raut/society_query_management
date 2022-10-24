@@ -16,9 +16,8 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { CircularProgress, List } from '@mui/material';
 import { signOut } from 'firebase/auth';
-import { auth, db } from '../../firebase';
+import { auth} from '../../firebase';
 import { useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
 import { useEffect } from 'react';
 import { AllProfileProvider } from '../../Context/admin.context';
 

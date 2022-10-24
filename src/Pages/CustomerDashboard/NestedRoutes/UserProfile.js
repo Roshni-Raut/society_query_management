@@ -4,7 +4,7 @@ import {  doc,   updateDoc } from 'firebase/firestore';
 import React,{ useState} from 'react'
 import { useProfile } from '../../../Context/currentprofile.context';
 import { auth, db } from '../../../firebase';
-import AvatarBtn from '../../AdminDashboard/NestedRoutes/AvatarBtn';
+import AvatarBtn from '../../Common/AvatarBtn';
 
 export const UserProfile = () => {
   const {profile,loading}=useProfile()

@@ -74,7 +74,7 @@ export const mainListItems = (
 
  
 
-  <NavLink to="notifications" style={{textDecoration: "none", color:"black"}}>
+  <NavLink to="event" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton>
       <ListItemIcon>
         <EventIcon />

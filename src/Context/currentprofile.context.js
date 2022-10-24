@@ -1,5 +1,5 @@
 
-import {  doc, getDoc, onSnapshot } from "firebase/firestore";
+import {  doc, onSnapshot } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 
@@ -11,7 +11,6 @@ export const CurrentProfileProvider=({children})=>{
     const [notice,setNotice]=useState([])
     const [loading, setLoading]=useState(false)
     const [count,setCount]=useState()
-
     
     useEffect(()=>{
       setLoading(true)
@@ -20,6 +19,7 @@ export const CurrentProfileProvider=({children})=>{
         setProfile(doc.data())
         setLoading(false);
       });
+
       const unsubQuery=onSnapshot(doc(db, "Query", auth.currentUser.uid), (doc) => {
         setLoading(true);
         const q=doc.data().queries;

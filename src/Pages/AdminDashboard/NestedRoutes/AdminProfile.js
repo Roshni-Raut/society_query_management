@@ -2,7 +2,7 @@ import { Alert, Avatar, Box, Button, Chip, CircularProgress, Container, Divider,
 import { sendPasswordResetEmail, updateProfile } from 'firebase/auth';
 import React,{ useState} from 'react'
 import { auth, color } from '../../../firebase';
-import AvatarBtn from './AvatarBtn';
+import AvatarBtn from '../../Common/AvatarBtn';
 
 export const AdminProfile = () => {
   const profile=auth.currentUser;

@@ -7,6 +7,8 @@ import { useEffect } from 'react';
 import Profiles from './Profiles';
 import { useAllProfile } from '../../../Context/admin.context';
 import SearchIcon from '@mui/icons-material/Search';
+import { useProfile } from '../../../Context/profile.context';
+import Snackbars from '../../Common/Snackbars';
 
 export const CreateProfile = () => {
   const [profile,setProfile]=useState({
@@ -18,8 +20,7 @@ export const CreateProfile = () => {
   })
   
   const arr=[101,102,103,104,105,106,107,108,109,110,201,202,203,204,205,206,207,208,209,210];
-  const [success,setSuccess]=useState("")
-  const [error,setError]= useState("")
+  const {success,error,setSuccess,setError}=useProfile();
   const [inputError,setInputError]= useState({
     fname:"",lname:"",mname:"",
     oname:"",oemail:"",ocontact:"",
@@ -55,10 +56,9 @@ export const CreateProfile = () => {
     try{
       localStorage.setItem("profile",JSON.stringify({...profile,flatno:"",pass:"",cpass:""}))
       setSuccess("Saved")
-      setTimeout(()=>setSuccess(""),6000)
     }catch(error){
+      console.log(error.code)
       setError(error.code);
-      setTimeout(()=>setError(""),6000)
     }
   }
   const cancel=()=>{
@@ -131,6 +131,7 @@ export const CreateProfile = () => {
 
       today = mm + '-' + dd + '-' + yyyy;
       const data= {
+        avatarUrl:"",
         fname: profile.fname,
         mname: profile.mname,
         lname:profile.lname,
@@ -153,11 +154,9 @@ export const CreateProfile = () => {
       await setDoc(doc(db, "Query", userCredential.uid), {queries:[]});
       await setDoc(doc(db, "Notifications", userCredential.uid), {notifications:[]});
       setSuccess("login Created successfully");
-      setTimeout(()=>{setSuccess("")},6000)
     })
     .catch((error) => {
       setError(error.code)
-      setTimeout(()=>{setError("")},6000)
     });
   }
   const register=(e)=>{
@@ -226,17 +225,7 @@ export const CreateProfile = () => {
 </Container>:
     <div>
     <Container>
-
-    <Snackbar open={ error!=="" } anchorOrigin={{ vertical: 'top', horizontal: 'center', }} >
-        <Alert   variant="filled" severity="error" sx={{ minWidth: '220px' }}>
-          {error}
-        </Alert>
-      </Snackbar>
-      <Snackbar open={ success!=="" } anchorOrigin={{ vertical: 'top', horizontal: 'center', }} >
-        <Alert   variant="filled" severity="success" sx={{ minWidth: '220px' }}>
-          {success}
-        </Alert>
-      </Snackbar>
+    <Snackbars error={error} success={success}/>
 
       <Button size="small" onClick={()=>setOpen(true)}sx={{backgroundColor:color}}variant="contained">Create new User</Button>
       <div style={{float:'right'}}>

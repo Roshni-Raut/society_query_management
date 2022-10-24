@@ -1,11 +1,12 @@
 import { Alert, Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle,  Grid, Snackbar } from '@mui/material'
 import { updateProfile } from 'firebase/auth'
+import { doc, updateDoc } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import React from 'react'
 import { useRef } from 'react'
 import { useState } from 'react'
 import AvatarEditor from 'react-avatar-editor'
-import { auth, color, storage } from '../../../firebase'
+import { admin, auth, color, db, storage } from '../../firebase'
 
 const AvatarBtn = ({profile}) => {
     const [open,setOpen]=useState(false)    
@@ -25,6 +26,15 @@ const AvatarBtn = ({profile}) => {
                 }
             })
         })
+    }
+    const updateUserProfile=async(downloadURL)=>{
+      if(profile.email!==admin){
+        const userRef = doc(db, "Profiles", profile.uid);
+        await updateDoc(userRef, {
+          avatarUrl:downloadURL
+        });
+
+      }
     }
     const onFileinputChange=(e)=>{
         console.log(e.target.files)
@@ -53,6 +63,7 @@ const AvatarBtn = ({profile}) => {
             uploadBytes(storageRef, blobFile,metadata).then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((downloadURL) => {
                     console.log('File available at', downloadURL);
+                    updateUserProfile(downloadURL);
                     updateProfile(auth.currentUser, {
                         photoURL: downloadURL
                       })
