@@ -1,3 +1,4 @@
+import { Paper } from '@mui/material';
 import React from 'react'
 import { useProfile } from '../../../Context/profile.context'
 import { CalendarEvent } from '../../Common/CalendarEvent'
@@ -5,7 +6,7 @@ import { CalendarEvent } from '../../Common/CalendarEvent'
 const Event = () => {
     const {loading,events}=useProfile();
   return (
-    <div><CalendarEvent events={events} loading={loading}/></div>
+    <Paper sx={{p:2}}><CalendarEvent events={events} loading={loading}/></Paper>
   )
 }
 

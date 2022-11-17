@@ -1,6 +1,5 @@
 import React from 'react';
 import 'rsuite/dist/styles/rsuite.min.css';
-//import 'rsuite/dist/rsuite.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import { SignIn } from './Pages/SignIn';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -20,6 +19,7 @@ import { CreateProfile } from './Pages/AdminDashboard/NestedRoutes/CreateProfile
 import { AdminProfile } from './Pages/AdminDashboard/NestedRoutes/AdminProfile';
 import { PublicRoute } from './Routes/PublicRoute';
 import Maintenance from './Pages/CustomerDashboard/NestedRoutes/Maintenance';
+import MaintenanceA from './Pages/AdminDashboard/NestedRoutes/MaintenanceA';
 import AEvent from './Pages/AdminDashboard/NestedRoutes/AEvent';
 import Event from './Pages/CustomerDashboard/NestedRoutes/Event';
 
@@ -50,7 +50,7 @@ function App() {
           <Route path="notifications" element={<ANotifications />} />
           <Route path="createUser" element={<CreateProfile />} />
           <Route path="profile" element={<AdminProfile />} />
-          <Route path="maintenance" element={<Maintenance/>} />
+          <Route path="maintenance" element={<MaintenanceA/>} />
           <Route path="event" element={<AEvent/>} />
         </Route>
       </Route>

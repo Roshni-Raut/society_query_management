@@ -8,13 +8,12 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
-import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import {mainListItems, secondaryListItems} from './NavList';
+import {NavList, secondaryListItems} from './NavList';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { Button, CircularProgress, ClickAwayListener, List, Tooltip, tooltipClasses } from '@mui/material';
+import {List } from '@mui/material';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useState } from 'react';
@@ -72,7 +71,6 @@ const mdTheme = createTheme();
 
 function DashboardContent() {
   const [open, setOpen] = useState(false);
-  const [loading,setLoading]=useState(false);
   const nav=useNavigate();
  
 
@@ -90,9 +88,7 @@ function DashboardContent() {
   };
   
 
-  return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'100vh'}}>
-  <CircularProgress />
-</Container>:
+  return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <AppBar position="absolute" open={open}>
@@ -133,7 +129,9 @@ function DashboardContent() {
         </Toolbar> 
           <Divider />
           <List component="nav">
-            {mainListItems}
+          <CurrentProfileProvider>
+            <NavList/>
+          </CurrentProfileProvider>
             <Divider sx={{ my: 1 }}/>
             {secondaryListItems}
           </List>
@@ -152,12 +150,10 @@ function DashboardContent() {
           }}>
         <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 1, mb: 1 }}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                     {/*Nested routing*/}
                     <CurrentProfileProvider>
                       <Outlet />
                     </CurrentProfileProvider>
-                </Paper>
                 </Container>
         </Box>
       </Box>

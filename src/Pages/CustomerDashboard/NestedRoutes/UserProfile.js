@@ -1,25 +1,25 @@
-import { Alert, Box, Button, Chip, CircularProgress, Container, Divider, Grid, Snackbar, TextField} from '@mui/material';
+import {  Box, Button, Chip, CircularProgress, Container, Divider, Grid, Paper,TextField} from '@mui/material';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import {  doc,   updateDoc } from 'firebase/firestore';
 import React,{ useState} from 'react'
-import { useProfile } from '../../../Context/currentprofile.context';
+import { useCurrentProfile } from '../../../Context/currentprofile.context';
+import { useProfile } from '../../../Context/profile.context';
 import { auth, db } from '../../../firebase';
 import AvatarBtn from '../../Common/AvatarBtn';
+import Snackbars from '../../Common/Snackbars';
 
 export const UserProfile = () => {
-  const {profile,loading}=useProfile()
+  const {profile,loading}=useCurrentProfile()
   const [phone1,setPhone1]=useState(profile.phone1)
   const [profession,setProfession]=useState(profile.profession)
   const [fmember,setFmember]=useState(profile.fmember)
   const [phone,setPhone]=useState(profile.phone)
   const [dob,setDob]=useState(profile.dob)
-  const [success,setSuccess]=useState("")
-  
-  const [error,setError]= useState("")
+  const {success,error,setSuccess,setError}=useProfile();
   const color="#645CAA"
   
   const changePass=()=>{
-    sendPasswordResetEmail(auth, profile.email)
+    sendPasswordResetEmail(auth , profile.email)
     .then(() => {
       setSuccess("Password Reset mail is send")
       setTimeout(()=>{setSuccess("")},6000)
@@ -66,13 +66,9 @@ export const UserProfile = () => {
   return (loading && dob?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'100vh'}}>
   <CircularProgress />
 </Container>:
-    <div><Container>
+    <Paper sx={{p:2}}><Container>
 
-      <Snackbar open={ success!=="" } anchorOrigin={{ vertical: 'top', horizontal: 'center', }} >
-        <Alert   variant="filled" severity="success" sx={{ width: '100%' }}>
-          {success}
-        </Alert>
-      </Snackbar>
+      <Snackbars error={error} success={success}/>
 
     <Grid item xs={12}>
       <Box component="form" sx={{mt:1}} >
@@ -171,6 +167,6 @@ export const UserProfile = () => {
         </Box>
     </Grid>
           
-  </Container></div>
+  </Container></Paper >
   )
 }

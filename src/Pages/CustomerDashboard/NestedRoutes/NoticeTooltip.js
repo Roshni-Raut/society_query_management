@@ -1,11 +1,11 @@
-import { CircularProgress, Container, Divider, IconButton, ListItem,Menu, MenuItem, Typography } from '@mui/material'
+import { Badge, CircularProgress, Container, Divider, IconButton, ListItem,Menu, MenuItem, Typography } from '@mui/material'
 import React from 'react'
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useProfile } from '../../../Context/currentprofile.context';
+import { useCurrentProfile } from '../../../Context/currentprofile.context';
 import TimeAgo from 'timeago-react';
 
 const NoticeTooltip = () => {
-    const {loading,notice}=useProfile();
+    const {loading,notice,unseenEvent,unseenNotice}=useCurrentProfile();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl)
 
@@ -47,9 +47,10 @@ const NoticeTooltip = () => {
       })
       }
       </Menu>
-    <IconButton color="inherit" onClick={handleClick} >     
-         <NotificationsIcon />
-        </IconButton>
+    <IconButton color="inherit" onClick={handleClick} >   
+    {unseenNotice+unseenEvent!==0?<Badge badgeContent={unseenNotice+unseenEvent} color="primary"><NotificationsIcon/></Badge>:
+      <NotificationsIcon/>}  
+      </IconButton>
     </div>
   )
 }

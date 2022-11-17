@@ -59,20 +59,11 @@ export const mainListItems = (
       <ListItemIcon>
         <CurrencyRupeeIcon />
       </ListItemIcon>
-      <ListItemText primary="Maintainence" />
+      <ListItemText primary="Maintenance" />
     </ListItemButton>
   </NavLink>
 
-  <NavLink to="history" style={{textDecoration: "none", color:"black"}}>
-    <ListItemButton>
-      <ListItemIcon>
-        <SecurityIcon />
-      </ListItemIcon>
-      <ListItemText primary="My Gate" />
-    </ListItemButton>
-  </NavLink>
 
- 
 
   <NavLink to="event" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton>

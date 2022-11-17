@@ -23,7 +23,7 @@ export const AllProfileProvider=({children})=>{
     useEffect(()=>{
         setLoading(true)
         /* Getting all the profiles*/ 
-        onSnapshot(collection(db, "Profiles"),collection=>{
+        const unsubProfile=onSnapshot(collection(db, "Profiles"),collection=>{
             setLoading(true);
             const p=[]
             collection.forEach(doc=>{
@@ -36,7 +36,7 @@ export const AllProfileProvider=({children})=>{
         
 
         /* Getting all the queries */     
-        onSnapshot(collection(db, "Query"),(collection) => {
+        const unsubQuery=onSnapshot(collection(db, "Query"),(collection) => {
             setLoading(true);
            let q=[]
             collection.forEach((doc)=>{
@@ -75,7 +75,7 @@ export const AllProfileProvider=({children})=>{
         });
 
         /* Getting all the Notifications*/ 
-        onSnapshot(collection(db, "Notifications"),collection=>{
+        const unsubNotice=onSnapshot(collection(db, "Notifications"),collection=>{
             setLoading(true);
             const n=[]
             collection.forEach(doc=>{
@@ -84,7 +84,16 @@ export const AllProfileProvider=({children})=>{
             setNotificaitons(n)
             setLoading(false);
         })
+
+        /* getting payment count */
+        console.log(profiles.length)
         setLoading(false)
+
+        return()=>{
+            unsubNotice();
+            unsubProfile();
+            unsubQuery();
+        }
     },[]);
 
     return <AllProfileContext.Provider value={{loading,profiles,queries,count,line,notifications,events}}>{children}</AllProfileContext.Provider>

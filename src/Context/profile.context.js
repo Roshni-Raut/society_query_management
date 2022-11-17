@@ -1,8 +1,7 @@
-import { Alert, Snackbar } from "@mui/material";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, onSnapshot } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
-import { admin, auth, db } from "../firebase";
+import {  auth, db } from "../firebase";
 
 const ProfileContext= createContext();
 
@@ -12,7 +11,7 @@ export const ProfileProvider=({children})=>{
     const [isOpen,setOpen]=useState(false)
     const [success,setSuc]=useState("")
     const [error,setErr]= useState("")
-    const [events,setEvents]=useState()
+    const [events,setEvents]=useState("")
 
     const setSuccess=(msg)=>{
         setSuc(msg)
@@ -31,6 +30,7 @@ export const ProfileProvider=({children})=>{
     
     useEffect(()=>{
         setLoading(true);
+    
         /* Getting all the Events*/ 
       const unsubevent=onSnapshot(collection(db, "Events"),collection=>{
         setLoading(true);

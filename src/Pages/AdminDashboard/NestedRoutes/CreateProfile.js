@@ -1,7 +1,7 @@
 import React, { useState} from 'react';
 import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth'
-import { Alert, Box, Button, Checkbox, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid,  IconButton,  Input,  InputAdornment,  InputLabel,  MenuItem, Snackbar, TextField, Typography} from '@mui/material';
-import {  setDoc ,doc, getDocs, collection} from "firebase/firestore"; 
+import {  Box, Button, Checkbox, Chip, CircularProgress, Container, Dialog, DialogActions, DialogTitle, Divider, Grid,  Input,  InputAdornment,  MenuItem, TextField, Typography} from '@mui/material';
+import {  setDoc ,doc,} from "firebase/firestore"; 
 import { auth,db } from '../../../firebase';
 import { useEffect } from 'react';
 import Profiles from './Profiles';

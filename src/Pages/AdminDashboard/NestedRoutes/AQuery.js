@@ -1,4 +1,4 @@
-import { Alert, Button, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material'
+import { Alert, Avatar, Button, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Radio, RadioGroup,  Typography } from '@mui/material'
 import { arrayRemove, arrayUnion, doc, getDoc, Timestamp, updateDoc } from 'firebase/firestore';
 import React from 'react'
 import { useState } from 'react';
@@ -58,7 +58,8 @@ const update=async(e)=>{
   const data={
     subject:q.subject,
     msg:`Status changed from ${q.status} to ${e.target.value}`,
-    createdAt:Timestamp.now()
+    createdAt:Timestamp.now(),
+    receiverHasRead: false
   }
   await updateDoc(doc(db, "Notifications", uid), {
     notifications: arrayUnion(data)
@@ -104,25 +105,41 @@ const update=async(e)=>{
 
       {/*sender details */}
   <Dialog open={open} onClose={onClose} fullWidth>
-      <DialogTitle>Sender Details</DialogTitle>
-        <Divider color="black" variant="middle"></Divider>
+
+      {profile && 
+      <DialogTitle>Sender Details: {`${profile.fname} ${profile.mname} ${profile.lname}`}</DialogTitle>
+      }
+      <Divider color="black" sx={{borderWidth:1}}/>
 
         {profile?<DialogContent>
-          <div className="row">
-            <div className='col'>Name: <b>{profile.fname+" "+profile.mname+" "+profile.lname}</b></div > 
-            <div className='col'>Flat no: {profile.flatno}</div > 
+          {console.log(profile.avatarUrl)}
+            <div style={{display:"flex",fontWeight:"bold", marginBottom:"10px"}}>
+            <div style={{marginRight:"10px"}}>
+              <Avatar src={profile.avatarUrl} sx={{height:150,width:150}}/>
+            </div>
+                   
+          <div>
+          <span style={{color:"grey"}}>Email: </span>
+            <span style={{color:color}}>{profile.email}</span>
+            <br/>
+            <span style={{color:"grey"}}>Phone: </span>
+            <span style={{color:color}}>{profile.phone}</span>
+            &nbsp; &nbsp; 
+
+            <span style={{color:"grey"}}>Flat no: </span>
+            <span style={{color:color}}>{profile.flatno}</span>
+            <br/>
+            <span style={{color:"grey"}}>Profession: </span>
+            <span style={{color:color}}>{profile.profession}</span><br/>
+
+            <span style={{color:"grey"}}>Owner: </span>
+            <span style={{color:color}}> {profile.owner==null?"same person":profile.owner.name}</span><br/>
+          
+            <span style={{color:"grey"}}>Query: </span>
+            <span style={{color:color}}>{profile.query}</span><br/>
+
           </div>
-          <div className="row">
-            <div className='col'>Email id: {profile.email}</div > 
-            <div className='col'>Phone no: {profile.phone}</div>
           </div>
-          <div className='row'>
-            <div className='col'>Owner: {profile.owner==null?"same person":profile.owner.name}</div >
-            {profile.owner!==null &&
-            <div className='col'>Owner mail: {profile.owner.email}</div >
-            }
-          </div>
-            <div className='col'>Query: {profile.query}</div >
         </DialogContent>
         :<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'80vh'}}>
           <CircularProgress /></Container>

@@ -14,9 +14,12 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from '@mui/material/Badge';
 import { NavLink } from 'react-router-dom';
 import PersonIcon from '@mui/icons-material/Person';
+import { useCurrentProfile } from '../../Context/currentprofile.context';
 
-export const mainListItems = (
-  <React.Fragment>
+export const NavList=() => {
+  const {unseenEvent,unseenNotice}=useCurrentProfile();
+
+  return(<React.Fragment>
     <NavLink to="history" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton  >
       <ListItemIcon>
@@ -53,21 +56,13 @@ export const mainListItems = (
     </ListItemButton>
   </NavLink>
 
-  <NavLink to="history" style={{textDecoration: "none", color:"black"}}>
-    <ListItemButton>
-      <ListItemIcon>
-        <SecurityIcon />
-      </ListItemIcon>
-      <ListItemText primary="My Gate" />
-    </ListItemButton>
-  </NavLink>
-
- 
 
   <NavLink to="event" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton>
       <ListItemIcon>
+      {unseenEvent!==0?<Badge badgeContent={unseenEvent} color="primary">
         <EventIcon />
+        </Badge>:<EventIcon/>}
       </ListItemIcon>
       <ListItemText primary="Events" />
     </ListItemButton>
@@ -77,15 +72,15 @@ export const mainListItems = (
   <NavLink to="notifications" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton >
       <ListItemIcon>
-        <Badge badgeContent={4} color="primary">
+        {unseenNotice+unseenEvent!==0?<Badge badgeContent={unseenNotice+unseenEvent} color="primary">
         <NotificationsIcon />
-        </Badge>
+        </Badge>:<NotificationsIcon/>}
       </ListItemIcon>
       <ListItemText primary="Notifications"/>
     </ListItemButton>
   </NavLink>
   </React.Fragment>
-);
+)};
 
 export const secondaryListItems = (
   <React.Fragment>

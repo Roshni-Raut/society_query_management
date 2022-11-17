@@ -5,8 +5,6 @@ import { useState } from 'react';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useProfile } from '../../../Context/profile.context';
 import { EditModal } from './EditModal';
 import { doc, getDoc } from 'firebase/firestore';
 import { color, db } from '../../../firebase';

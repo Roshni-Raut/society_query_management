@@ -1,4 +1,4 @@
-import { Alert, Avatar, Box, Button, Chip, CircularProgress, Container, Divider, Grid, Snackbar, TextField} from '@mui/material';
+import { Alert,Box, Button, Chip, CircularProgress, Container, Divider, Grid, Snackbar, TextField} from '@mui/material';
 import { sendPasswordResetEmail, updateProfile } from 'firebase/auth';
 import React,{ useState} from 'react'
 import { auth, color } from '../../../firebase';

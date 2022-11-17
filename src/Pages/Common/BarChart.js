@@ -3,6 +3,7 @@ import React from 'react'
 
 export const BarChart = ({count}) => {
   return (
+
     <CChart
       type="bar"
       data={{
@@ -13,9 +14,9 @@ export const BarChart = ({count}) => {
           backgroundColor: ['#ffbb33',"#33b5e5","#00C851","#ff4444"],
           data:count,
         },
-        ],
-      }}
-      labels="Status"
-      />
+      ],
+    }}
+    labels="Status"
+    />
   )
 }

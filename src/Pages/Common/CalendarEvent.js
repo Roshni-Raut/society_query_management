@@ -3,15 +3,14 @@ import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import { useState } from 'react'
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField } from '@mui/material'
-import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, arrayUnion, collection, doc, Timestamp, updateDoc } from 'firebase/firestore'
 import { useRef } from 'react'
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import { useProfile } from '../../Context/profile.context'
 import Snackbars from './Snackbars'
-import { color, db } from '../../firebase'
+import { admin, auth, color, db } from '../../firebase'
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import DescriptionIcon from '@mui/icons-material/Description';
 
 export const CalendarEvent = ({events,loading}) => {
     const [isOpen1,setOpen1]=useState(false);
@@ -24,7 +23,10 @@ export const CalendarEvent = ({events,loading}) => {
     const localizer = momentLocalizer(moment);
 
     function Open(event){setOpen(true);setEvent(event)}
-    function Open1(event){setOpen1(true);setEvent(event)}
+    function Open1(event){
+    
+        setOpen1(true);setEvent(event);
+      }
     function Close(){setOpen(false);setEvent(null)}
     function Close1(){setOpen1(false);setEvent(null)}
 
@@ -40,6 +42,16 @@ export const CalendarEvent = ({events,loading}) => {
               description:des.current.value,
               venue: venue.current.value
           })
+          /* adding notifications in 'all' document */
+          const data={
+            subject:"New Event",
+            msg:`Event: ${title.current.value} at ${venue.current.value}`,
+            createdAt:Timestamp.now(),
+            receiverHasRead: false
+          }
+          await updateDoc(doc(db, "Notifications","all"), {
+            notifications: arrayUnion(data)
+          });
           setSuccess("Event added")
           Close1();
       }catch(error){
@@ -65,7 +77,7 @@ export const CalendarEvent = ({events,loading}) => {
         defaultView="month"
         //views={["month", "week", "day"]}
         defaultDate={new Date()}
-        scrollToTime={new Date(1970, 1, 1, 6)}
+        //scrollToTime={new Date(1970, 1, 1, 6)}
         selectable={true}
         onSelectSlot={(e)=>Open1(e)}
         onSelectEvent={e => Open(e)}

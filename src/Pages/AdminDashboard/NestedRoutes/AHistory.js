@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 import TimeAgo from 'timeago-react'
 import { useAllProfile } from '../../../Context/admin.context'
 import { auth} from '../../../firebase'
-import { BarChart } from './BarChart'
+import { BarChart } from '../../Common/BarChart'
 
 export const AHistory = () => {
   const {loading,queries,count,profiles}=useAllProfile();
@@ -58,7 +58,7 @@ export const AHistory = () => {
       {/* Recent Queries */}
       <Grid item xs={12}>
       <Typography component="h2" variant="h6" color="primary" gutterBottom>
-        Recent Orders
+        Recent Queries
     </Typography>
       <Table size="small">
         <TableHead>

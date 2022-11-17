@@ -1,9 +1,8 @@
-import { Alert,Box, Button, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent,  DialogTitle, Divider, Grid, MenuItem, TextField, Typography} from '@mui/material';
+import { Alert,Box, Button, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent,  DialogTitle, Divider, Grid, MenuItem, Paper, TextField} from '@mui/material';
 import {  arrayRemove, arrayUnion,  doc, Timestamp,  updateDoc,   } from 'firebase/firestore';
 import React,{useState} from 'react'
 import { useRef } from 'react';
-import { useEffect } from 'react';
-import { useProfile } from '../../../Context/currentprofile.context';
+import { useCurrentProfile } from '../../../Context/currentprofile.context';
 import {  auth, db } from '../../../firebase';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -13,22 +12,22 @@ export const Query = () => {
   const [open,setOpen]=useState(false)
   const query=useRef({subject:"",priority:"",query:""})
   const color="#645CAA"
-  const {loading,queries}=useProfile()
+  const {loading,queries}=useCurrentProfile()
 
   const style=(status)=>{
     return status==='pending'?'warning':status==='underwatch'?'info':status==='done'?'success':'error';
-  }
+  }/*
   const formatDate = (dateString) => {
     const options = {year: 'numeric', month: 'long',day: 'numeric', hour: 'numeric', minute: '2-digit'}
     var date=new Intl.DateTimeFormat('en-US', options ).format(dateString)
     return date.toString()
-  }
+  }*/
   const send=async(e)=>{
     e.preventDefault()
-    
     const data={...query.current.value,
       status:"pending",
-      createdAt: Timestamp.now()
+      createdAt: Timestamp.now(),
+      receiverHasRead: false
     }
     console.log(data)
     setOpen(false)
@@ -71,7 +70,7 @@ export const Query = () => {
     }
   }
   return (
-    <div>
+    <Paper sx={{p:2}}>
     <Grid container spacing={3} justifyContent="center" sx={{mt:1}}>
       {success && <Alert variant="filled" severity="success" sx={{position:'absolute', minWidth:'220px'}}>{success}</Alert>}
       {error && <Alert variant="filled" severity="error" sx={{position:'absolute', minWidth:'220px'}}>{error}</Alert>}
@@ -131,7 +130,7 @@ export const Query = () => {
     <tbody>
       {queries.map((x,i)=>(
               <tr key={i} className={`table-${style(x.status)}`}>
-              <td><Alert severity={style(x.status)} sx={{borderWidth:0,p:1,borderWidth:0}} variant="outlined" >{x.subject}</Alert></td>
+              <td><Alert severity={style(x.status)} sx={{borderWidth:0,p:1}} variant="outlined" >{x.subject}</Alert></td>
               <td>{x.query}</td>
               <td>{x.priority}</td>
               <td><Chip label={x.status}  size="small" color={style(x.status)} /> </td>
@@ -144,6 +143,6 @@ export const Query = () => {
         </tbody>
   </table>
 }
-  </div>
+  </Paper>
   )
 }

@@ -1,5 +1,5 @@
 
-import {  doc, onSnapshot } from "firebase/firestore";
+import {  collection, doc, onSnapshot } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 
@@ -9,8 +9,11 @@ export const CurrentProfileProvider=({children})=>{
     const [profile,setProfile]=useState([])
     const [queries,setQuery]=useState([])
     const [notice,setNotice]=useState([])
+    const [noticeall,setNoticeAll]=useState([])
     const [loading, setLoading]=useState(false)
     const [count,setCount]=useState()
+    const [unseenNotice,setUnseenNotice]=useState(0)
+    const [unseenEvent,setUnseenEvent]=useState(0)
     
     useEffect(()=>{
       setLoading(true)
@@ -20,6 +23,7 @@ export const CurrentProfileProvider=({children})=>{
         setLoading(false);
       });
 
+      //fetching all queries 
       const unsubQuery=onSnapshot(doc(db, "Query", auth.currentUser.uid), (doc) => {
         setLoading(true);
         const q=doc.data().queries;
@@ -33,21 +37,38 @@ export const CurrentProfileProvider=({children})=>{
           setCount(arr);
           setLoading(false);
       });
-      const unsubNotifications=onSnapshot(doc(db, "Notifications", auth.currentUser.uid), (doc) => {
-        setLoading(true);
+      // Fetching all Notification 
+      const unsubNotifications=onSnapshot(doc(db, "Notifications",auth.currentUser.uid ),(doc) => {
+            const n=doc.data().notifications;
+            n.sort((a,b)=>{return b.createdAt - a.createdAt})
+            setNotice(n)
+            var j=0;
+            for(var i=0;i<n.length;i++){
+              if(n[i].receiverHasRead===false)
+                j++;
+            }
+            setUnseenNotice(j);
+      });
+      const unsubNotification=onSnapshot(doc(db, "Notifications", 'all'), (doc) => {
         const n=doc.data().notifications;
-        n.sort((a,b)=>{return b.createdAt - a.createdAt})
-        setNotice(n)
-        setLoading(false);
+            n.sort((a,b)=>{return b.createdAt - a.createdAt})
+            setNoticeAll(n)
+            var j=0;
+            for(var i=0;i<n.length;i++){
+              if(n[i].receiverHasRead===false)
+                j++;
+            }
+            setUnseenEvent(j);
       });
       setLoading(false)
       return()=>{
         unsubQuery();
         unsubProfiles();
         unsubNotifications();
+        unsubNotification();
       }
     },[]);
 
-    return <CurrentProfileContext.Provider value={{loading,profile,queries,count,notice}}>{children}</CurrentProfileContext.Provider>
+    return <CurrentProfileContext.Provider value={{loading,profile,queries,count,notice,unseenEvent,unseenNotice,noticeall}}>{children}</CurrentProfileContext.Provider>
 }
-export const useProfile=()=>useContext(CurrentProfileContext);
+export const useCurrentProfile=()=>useContext(CurrentProfileContext);

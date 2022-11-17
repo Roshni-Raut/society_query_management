@@ -4,7 +4,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, TextField } from '@mui/material';
 import { useProfile } from '../../../Context/profile.context';
 import { useRef } from 'react';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, arrayUnion, collection, doc, Timestamp, updateDoc } from 'firebase/firestore';
 import { color, db } from '../../../firebase';
 import { CalendarEvent } from '../../Common/CalendarEvent';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -22,16 +22,20 @@ const AEvent = () => {
     const title=useRef();
     const des=useRef();
     const venue=useRef();
-    const [value, setValue] = React.useState();
+    const [endValue, setEndValue] = React.useState();
+    const [startValue, setStartValue] = React.useState();
 
-  const handleChange = (newValue) => {
-    setValue(newValue);
+  const ChangeEnd = (newValue) => {
+    setEndValue(newValue);
+  };
+  const ChangeStart = (newValue) => {
+    setStartValue(newValue);
   };
     async function add(e){
         e.preventDefault();
-        
+        console.log(endTD.current.value, startTD.current.value)
         try{
-            if(endTD<=startTD)
+            if(endTD.current.value<=startTD.current.value)
                 throw new Error("End time should be greater than start time");
 
             await addDoc(collection(db,"Events"),{
@@ -41,6 +45,15 @@ const AEvent = () => {
                 description:des.current.value,
                 venue: venue.current.value
             })
+            const data={
+                subject:"New Event",
+                msg:`Event: ${title.current.value} at ${venue.current.value}`,
+                createdAt:Timestamp.now(),
+                receiverHasRead: false
+              }
+              await updateDoc(doc(db, "Notifications","all"), {
+                notifications: arrayUnion(data)
+              });
             setSuccess("Event added")
             Close();
         }catch(error){
@@ -51,8 +64,8 @@ const AEvent = () => {
     <div>
         <Snackbars error={error} success={success}/>
 
-        <Button size="small"  onClick={Open}sx={{backgroundColor:color,m:2}} variant="contained">Create New Event</Button>
-        <Button size="small"  sx={{backgroundColor:color,m:2}} variant="contained">Show</Button>
+        <Button size="small"  onClick={Open}sx={{backgroundColor:color,mb:1,mr:2}} variant="contained">Create New Event</Button>
+        
         <CalendarEvent events={events} loading={loading}/>
 
   <Dialog open={isOpen} onClose={Close}>
@@ -70,8 +83,8 @@ const AEvent = () => {
                         label="Start Date&Time "
                         inputRef={startTD}
                         renderInput={(params) => <TextField {...params} />}
-                        value={value}
-                        onChange={handleChange}
+                        value={startValue}
+                        onChange={ChangeStart}
                         />
                 </LocalizationProvider>
             </Grid>
@@ -81,8 +94,8 @@ const AEvent = () => {
                         label="End Date&Time "
                         inputRef={endTD}
                         renderInput={(params) => <TextField {...params} />}
-                        value={value}
-                        onChange={handleChange}
+                        value={endValue}
+                        onChange={ChangeEnd}
                     />
                 </LocalizationProvider>
           </Grid>
