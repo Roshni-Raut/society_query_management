@@ -11,7 +11,7 @@ export const AllProfileProvider=({children})=>{
     const [count,setCount]=useState([])
     const [line,setLine]=useState([])
     const [notifications,setNotificaitons]=useState()
-    const [events,setEvents]=useState()
+    const [AllRequest,setAllRequest]=useState()
 
     const formatDate = (dateString) => {
         dateString=dateString.toDate()
@@ -85,6 +85,22 @@ export const AllProfileProvider=({children})=>{
             setLoading(false);
         })
 
+        /*getting all event Requests */
+        const unsubEventRequest=onSnapshot(collection(db, "EventRequest"),collection=>{
+            setLoading(true);
+            const n=[]
+            collection.forEach(doc=>{
+                const n1=doc.data().requests;
+                if(n1)
+                n1.forEach(data=>{
+                    n.push(data)
+                })
+            })
+            setAllRequest(n)
+            console.log(AllRequest)
+            setLoading(false);
+        })
+
         /* getting payment count */
         console.log(profiles.length)
         setLoading(false)
@@ -93,10 +109,11 @@ export const AllProfileProvider=({children})=>{
             unsubNotice();
             unsubProfile();
             unsubQuery();
+            unsubEventRequest();
         }
     },[]);
 
-    return <AllProfileContext.Provider value={{loading,profiles,queries,count,line,notifications,events}}>{children}</AllProfileContext.Provider>
+    return <AllProfileContext.Provider value={{loading,profiles,queries,count,line,notifications,AllRequest}}>{children}</AllProfileContext.Provider>
 }
 
 export const useAllProfile=()=>useContext(AllProfileContext);

@@ -85,6 +85,7 @@ const AEvent = () => {
                         renderInput={(params) => <TextField {...params} />}
                         value={startValue}
                         onChange={ChangeStart}
+                        minDate={new Date()}
                         />
                 </LocalizationProvider>
             </Grid>
@@ -96,6 +97,7 @@ const AEvent = () => {
                         renderInput={(params) => <TextField {...params} />}
                         value={endValue}
                         onChange={ChangeEnd}
+                        minDate={new Date()}
                     />
                 </LocalizationProvider>
           </Grid>

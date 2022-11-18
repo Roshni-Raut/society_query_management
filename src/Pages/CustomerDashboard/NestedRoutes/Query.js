@@ -16,12 +16,7 @@ export const Query = () => {
 
   const style=(status)=>{
     return status==='pending'?'warning':status==='underwatch'?'info':status==='done'?'success':'error';
-  }/*
-  const formatDate = (dateString) => {
-    const options = {year: 'numeric', month: 'long',day: 'numeric', hour: 'numeric', minute: '2-digit'}
-    var date=new Intl.DateTimeFormat('en-US', options ).format(dateString)
-    return date.toString()
-  }*/
+  }
   const send=async(e)=>{
     e.preventDefault()
     const data={...query.current.value,

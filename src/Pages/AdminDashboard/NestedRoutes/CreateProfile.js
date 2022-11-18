@@ -153,6 +153,7 @@ export const CreateProfile = () => {
       await setDoc(doc(db, "Profiles", userCredential.uid), data);
       await setDoc(doc(db, "Query", userCredential.uid), {queries:[]});
       await setDoc(doc(db, "Notifications", userCredential.uid), {notifications:[]});
+      await setDoc(doc(db, "EventRequest", userCredential.uid), {requests:[]});
       setSuccess("login Created successfully");
     })
     .catch((error) => {

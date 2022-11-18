@@ -1,5 +1,5 @@
 
-import {  collection, doc, onSnapshot } from "firebase/firestore";
+import {   doc, onSnapshot } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 
@@ -9,6 +9,7 @@ export const CurrentProfileProvider=({children})=>{
     const [profile,setProfile]=useState([])
     const [queries,setQuery]=useState([])
     const [notice,setNotice]=useState([])
+    const [eRequest,setERequest]=useState([])
     const [noticeall,setNoticeAll]=useState([])
     const [loading, setLoading]=useState(false)
     const [count,setCount]=useState()
@@ -60,15 +61,30 @@ export const CurrentProfileProvider=({children})=>{
             }
             setUnseenEvent(j);
       });
+
+      //fetching all event requests
+      const unsubEventRequest=onSnapshot(doc(db, "EventRequest",auth.currentUser.uid ),(doc) => {
+        const n=doc.data().requests;
+        n.sort((a,b)=>{return b.createdAt - a.createdAt})
+        setERequest(n)
+        console.log(eRequest)
+        var j=0;
+        for(var i=0;i<n.length;i++){
+          if(n[i].receiverHasRead===false)
+            j++;
+        }
+        //setUnseenNotice(j);
+  });
       setLoading(false)
       return()=>{
         unsubQuery();
         unsubProfiles();
         unsubNotifications();
         unsubNotification();
+        unsubEventRequest();
       }
     },[]);
 
-    return <CurrentProfileContext.Provider value={{loading,profile,queries,count,notice,unseenEvent,unseenNotice,noticeall}}>{children}</CurrentProfileContext.Provider>
+    return <CurrentProfileContext.Provider value={{loading,profile,queries,count,notice,unseenEvent,unseenNotice,noticeall,eRequest}}>{children}</CurrentProfileContext.Provider>
 }
 export const useCurrentProfile=()=>useContext(CurrentProfileContext);

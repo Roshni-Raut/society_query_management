@@ -36,8 +36,9 @@ export const ProfileProvider=({children})=>{
         setLoading(true);
         const e=[]
         collection.forEach(doc=>{
-            e.push({...doc.data(),start:doc.data().start.toDate(),end:doc.data().end.toDate()})
+            e.push({...doc.data(),start:doc.data().start.toDate(),end:doc.data().end.toDate(),id:doc.id})
         })
+        e.sort((a,b)=>a.start-b.start)
         setEvents(e) 
         setLoading(false);
     })

@@ -1,9 +1,10 @@
 import { Copyright } from '@mui/icons-material'
 import { CircularProgress, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import { Container } from '@mui/system'
-import React from 'react'
+import React, { useRef } from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import ReactToPrint from 'react-to-print'
 import TimeAgo from 'timeago-react'
 import { useAllProfile } from '../../../Context/admin.context'
 import { auth} from '../../../firebase'
@@ -12,7 +13,7 @@ import { BarChart } from '../../Common/BarChart'
 export const AHistory = () => {
   const {loading,queries,count,profiles}=useAllProfile();
   const [flatCount,setCount]=useState([0,0,0]);
-
+  const componentRef=useRef();
   useEffect(()=>{
     let flatCount=[0,0,0];
     if(profiles){
@@ -34,7 +35,14 @@ export const AHistory = () => {
           Welcome {auth.currentUser.displayName}
   </Typography>
 
-  <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+  <ReactToPrint 
+    trigger={()=>{return <button>Print report</button>}}
+    content={()=>componentRef.current}
+  />
+
+  <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }} ref={componentRef}>
+  <Typography component="h2" variant="h5" color="#6d1b7b" sx={{textAlign:'center',fontWeight:'bold',textDecoration:'underline'}} gutterBottom>Society Report</Typography>
+   
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12} md={8} lg={9}>
