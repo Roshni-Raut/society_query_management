@@ -33,7 +33,6 @@ export const CheckoutForm = ({days}) => {
   const stripe=useStripe();
   const elements=useElements();
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const {error,paymentMethod}=await stripe.createPaymentMethod({
@@ -46,7 +45,7 @@ export const CheckoutForm = ({days}) => {
         setIsLoading(true)
         const {id}=paymentMethod
         const response =await axios.post("http://localhost:4000/payment",{
-            amount:1000*100*(Math.floor(days/31)),
+            amount:100000+1000*100*(Math.floor(days/31)),
             id,
             email: auth.currentUser.email,
         })
@@ -93,7 +92,7 @@ export const CheckoutForm = ({days}) => {
 
       <Typography variant="subtitle1" gutterBottom>
       <span style={{color:"grey",}}>Amount: </span>
-        <CurrencyRupeeIcon sx={{height:"18px" ,mr:-1}}/>1000<br/>
+        <CurrencyRupeeIcon sx={{height:"18px" ,mr:-1}}/>{1000+1000*(Math.floor(days/31))}<br/>
       </Typography>
       
       <span style={{margin:2,mb:3}}> <CardElement options={CARD_OPTIONS}/> </span>

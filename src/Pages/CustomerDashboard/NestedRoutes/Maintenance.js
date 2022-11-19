@@ -3,12 +3,9 @@ import { CheckoutForm } from './CheckoutForm'
 import {loadStripe} from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { Alert, Card, CardContent, Grid, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
-import successimg from '../../../static/success.gif'
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import TimeAgo from 'timeago-react';
 import axios from 'axios';
 import { auth } from '../../../firebase';
-import { useMemo } from 'react';
 import { Paid } from './Paid';
 
 const stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_PUBLIC_API_KEY}`);

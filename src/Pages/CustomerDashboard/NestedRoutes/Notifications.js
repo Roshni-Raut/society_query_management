@@ -50,12 +50,12 @@ export const Notifications = () => {
   return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'100vh'}}>
   <CircularProgress />
 </Container>:<Paper sx={{p:2}}>
-<Typography component="h2" variant="h6" color="primary" gutterBottom>
+
+    <div style={{display:'flex'}}>
+      <div>
+      <Typography component="h2" variant="h6" color="primary" gutterBottom>
         Notifications
     </Typography>
-    <div style={{display:'flex'}}>
-<div>
-
     {notice.length===0?<MenuItem>There are no notifications</MenuItem>:
       notice.map((x,i)=>{
         return<div key={i}>    
@@ -71,7 +71,9 @@ export const Notifications = () => {
       })}
         </div>
         <div style={{mr:2}}>
-
+        <Typography component="h2" variant="h6" color="primary" gutterBottom>
+        Event Notifications
+        </Typography>
       {noticeall.length===0?<MenuItem>There are no Events</MenuItem>:
       noticeall.map((x,i)=>{
         return<div key={i}>    

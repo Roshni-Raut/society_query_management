@@ -1,7 +1,7 @@
 import React, { useState} from 'react';
 import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth'
 import {  Box, Button, Checkbox, Chip, CircularProgress, Container, Dialog, DialogActions, DialogTitle, Divider, Grid,  Input,  InputAdornment,  MenuItem, TextField, Typography} from '@mui/material';
-import {  setDoc ,doc,} from "firebase/firestore"; 
+import {  setDoc ,doc, Timestamp,} from "firebase/firestore"; 
 import { auth,db } from '../../../firebase';
 import { useEffect } from 'react';
 import Profiles from './Profiles';
@@ -124,12 +124,7 @@ export const CreateProfile = () => {
     updateProfile(auth.currentUser, {
       displayName: profile.fname+" "+profile.lname
     }).then(async()=>{
-      var today = new Date();
-      var dd = String(today.getDate()).padStart(2, '0');
-      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-      var yyyy = today.getFullYear();
-
-      today = mm + '-' + dd + '-' + yyyy;
+      
       const data= {
         avatarUrl:"",
         fname: profile.fname,
@@ -148,7 +143,7 @@ export const CreateProfile = () => {
         owner:isOwner?null:{name: owner.oname,
           email:owner.oemail,
           contact:owner.ocontact},
-        time: today
+        time: Timestamp.now()
       };
       await setDoc(doc(db, "Profiles", userCredential.uid), data);
       await setDoc(doc(db, "Query", userCredential.uid), {queries:[]});

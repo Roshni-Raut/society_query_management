@@ -33,9 +33,7 @@ export const AllProfileProvider=({children})=>{
             setProfile(p) 
             setLoading(false);
         })
-
         
-
         /* Getting all the queries */     
         const unsubQuery=onSnapshot(collection(db, "Query"),(collection) => {
             setLoading(true);
