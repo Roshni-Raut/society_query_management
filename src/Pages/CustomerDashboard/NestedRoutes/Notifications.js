@@ -46,6 +46,7 @@ export const Notifications = () => {
     if(unseenNotice+unseenEvent>0)
       update();
   },[])
+  
   return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'100vh'}}>
   <CircularProgress />
 </Container>:<Paper sx={{p:2}}>

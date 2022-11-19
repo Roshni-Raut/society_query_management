@@ -15,8 +15,11 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonIcon from '@mui/icons-material/Person';
 import Badge from '@mui/material/Badge';
 import { NavLink } from 'react-router-dom';
+import { useAllProfile } from '../../Context/admin.context';
 
-export const mainListItems = (
+export const NavList = ()=>{
+  const {eventRequestCount}=useAllProfile();
+  return(
   <React.Fragment>
     <NavLink to="history" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton  >
@@ -78,15 +81,15 @@ export const mainListItems = (
   <NavLink to="notifications" style={{textDecoration: "none", color:"black"}}>
     <ListItemButton >
       <ListItemIcon>
-        <Badge badgeContent={4} color="primary">
+      {eventRequestCount!==0?<Badge badgeContent={eventRequestCount} color="primary">
         <NotificationsIcon />
-        </Badge>
+        </Badge>:<NotificationsIcon/>}
       </ListItemIcon>
       <ListItemText primary="Notifications"/>
     </ListItemButton>
   </NavLink>
   </React.Fragment>
-);
+)};
 
 export const secondaryListItems = (
   <React.Fragment>

@@ -11,7 +11,7 @@ import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import {mainListItems, secondaryListItems} from './NavList';
+import { NavList, secondaryListItems} from './NavList';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { CircularProgress, List } from '@mui/material';
@@ -139,7 +139,9 @@ function DashboardContent() {
         </Toolbar> 
           <Divider />
           <List component="nav">
-            {mainListItems}
+          <AllProfileProvider>
+            <NavList/>
+          </AllProfileProvider>
             <Divider sx={{ my: 1 }}/>
             {secondaryListItems}
           </List>

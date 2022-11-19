@@ -1,4 +1,4 @@
-import { CircularProgress, Container, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { CircularProgress, Container, Grid, Paper, Table, TableBody, TableCell,  TableHead, TableRow, Typography } from '@mui/material';
 import React from 'react'
 import Time from 'react-time/lib/Time';
 import TimeAgo from 'timeago-react';
@@ -10,7 +10,6 @@ import { BarChart } from '../../Common/BarChart';
 export const History = () => {
     const {loading,queries,count}=useCurrentProfile();
     const {events}=useProfile();
-    const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   
   return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'80vh'}}>
   <CircularProgress />
@@ -18,7 +17,6 @@ export const History = () => {
 <div>
   <Typography variant="h4" textAlign={"center"} margin={3}>
           Welcome {auth.currentUser.displayName}
-          {console.log(count)}
   </Typography>
   <Grid container spacing={3}>
   {/* Graph that represents query status */}
@@ -33,7 +31,7 @@ export const History = () => {
     </Paper>
   </Grid>
     {/* Recent event */}
-    <Grid item sx={6}>
+    <Grid item xs={6}>
     <Paper sx={{p:2, mt:1}}>
       <Grid item xs={12}>
     <Typography component="h2" variant="h6" color="primary" gutterBottom>
@@ -53,8 +51,7 @@ export const History = () => {
                 {row.title} at <Time value={row.start} format="HH:mm"  />
                 </TableCell>
               <TableCell><Time value={row.start} format="DD-MM-YYYY"/></TableCell>
-              {/*
-              <TableCell><TimeAgo datetime={row.createdAt.toDate()}/></TableCell>*/}
+              
             </TableRow>
           ))}
           
