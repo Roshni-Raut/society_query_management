@@ -19,3 +19,4 @@ export const storage=getStorage(app);
 
 export const admin="rohitsraut95@gmail.com"
 export const color="#645CAA"
+export const server_url="https://payment-server-ez22.onrender.com"

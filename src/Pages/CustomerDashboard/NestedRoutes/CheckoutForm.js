@@ -1,7 +1,7 @@
 import React from 'react';
 import {CardElement,useStripe,useElements} from '@stripe/react-stripe-js';
 import { Button, CardActions, CircularProgress, Container, Typography} from '@mui/material';
-import { auth, color} from '../../../firebase';
+import { auth, color, server_url} from '../../../firebase';
 import Snackbars from '../../Common/Snackbars'
 import {useProfile} from '../../../Context/profile.context'
 import {useCurrentProfile} from '../../../Context/currentprofile.context'
@@ -44,7 +44,7 @@ export const CheckoutForm = ({days}) => {
       try{
         setIsLoading(true)
         const {id}=paymentMethod
-        const response =await axios.post("http://localhost:4000/payment",{
+        const response =await axios.post(server_url+"/payment",{
             amount:100000+1000*100*(Math.floor(days/31)),
             id,
             email: auth.currentUser.email,

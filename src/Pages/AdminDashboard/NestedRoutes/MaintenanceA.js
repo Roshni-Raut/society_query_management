@@ -10,17 +10,19 @@ import stripe from "../../../static/stripe.gif"
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { Container } from '@mui/system'
+import { server_url } from '../../../firebase'
 
 const MaintenanceA = () => {
   const [payments,setPayment]=useState([])
   const {profiles}=useAllProfile()
   const [unpaid,setunpaid]=useState(0);
   const [loading,setloading]=useState(true);
+  const [message,setMessage]=useState()
 
   useEffect(() => {
     async function fetch(){
       try{
-        await axios.post("http://localhost:4000/Allpaymentlist").then((response)=>{
+        await axios.post(server_url+"/Allpaymentlist").then((response)=>{
           setloading(true);
           const resPay=response.data.paymentIntents;
           var detail=[];
@@ -60,14 +62,14 @@ const MaintenanceA = () => {
         }) 
       }catch(error){
         console.log("error:"+error)
+        setMessage(" Server is down!! try again later ")
       }
     }
     if(payments.length===0)
       fetch();
   }, [payments])
 
-  return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'80vh'}}>
-  <CircularProgress /></Container>:
+  return (message?<Alert  variant="filled" severity="error" sx={{ minWidth: '220px' }}>{message}</Alert>:
     <div>
     <div style={{display:"flex", justifyContent:"right"}}>
       go to your stripe account for better view 

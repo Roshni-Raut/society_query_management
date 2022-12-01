@@ -1,8 +1,33 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+  match /Profiles/{user_id} {
+      allow read: if user_id==request.auth.uid;
+      allow write: if user_id==request.auth.uid;
+    }
+  match /Query/{user_id} {
+      allow read: if user_id==request.auth.uid;
+      allow write: if user_id==request.auth.uid;
+    }
+  match /Notifications/all {
+      allow read: if true;
+      allow write: if true;
+    }
+  match /Notifications/{user_id} {
+      allow read: if user_id==request.auth.uid;
+      allow write: if user_id==request.auth.uid;
+    }
+  match /Events/{user_id} {
+      allow read: if true;
+      allow write: if user_id==request.auth.uid;
+    }
+  match /EventRequest/{user_id} {
+  		allow read: if user_id==request.auth.uid;
+      allow write: if user_id==request.auth.uid;
+  }
     match /{document=**} {
-      allow read, write: if false;
+      allow read: if request.auth.uid=='7fOegaGLUmfqcAcOaiDVWAl5FW23';
+      allow write: if request.auth.uid=='7fOegaGLUmfqcAcOaiDVWAl5FW23';
     }
   }
 }

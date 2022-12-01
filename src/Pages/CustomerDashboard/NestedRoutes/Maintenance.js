@@ -5,7 +5,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { Alert, Card, CardContent, Grid, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import TimeAgo from 'timeago-react';
 import axios from 'axios';
-import { auth } from '../../../firebase';
+import { auth, server_url } from '../../../firebase';
 import { Paid } from './Paid';
 
 const stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_PUBLIC_API_KEY}`);
@@ -20,7 +20,7 @@ const Maintenance = () => {
   useEffect(() => {
     async function fetch(){
       try{
-        await axios.post("http://localhost:4000/paymentlist",{
+        await axios.post(server_url+"/paymentlist",{
           email: auth.currentUser.email,
         }).then((response)=>{
           if(response.data.paymentIntents.length>0){
