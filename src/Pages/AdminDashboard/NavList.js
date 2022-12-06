@@ -18,7 +18,7 @@ import { NavLink } from 'react-router-dom';
 import { useAllProfile } from '../../Context/admin.context';
 
 export const NavList = ()=>{
-  const {eventRequestCount}=useAllProfile();
+  const {eventRequestCount,queryCount}=useAllProfile();
   return(
   <React.Fragment>
     <NavLink to="history" style={{textDecoration: "none", color:"black"}}>

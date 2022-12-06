@@ -13,6 +13,7 @@ export const AllProfileProvider=({children})=>{
     const [notifications,setNotificaitons]=useState()
     const [AllRequest,setAllRequest]=useState()
     const [eventRequestCount,setEventRequestCount]=useState()
+    const [queryCount,setQueryCount]=useState()
 
     const formatDate = (dateString) => {
         dateString=dateString.toDate()
@@ -40,10 +41,12 @@ export const AllProfileProvider=({children})=>{
            let q=[]
             collection.forEach((doc)=>{
                 const arr=doc.data().queries
+                let j=0;
                 for( var i in arr){
                     arr[i].uid=doc.id;
                     q.push(arr[i])
                 }
+                setQueryCount(j);
                 q.sort((a,b)=>{return b.createdAt - a.createdAt})
             })
             setQuery(q)
@@ -88,13 +91,13 @@ export const AllProfileProvider=({children})=>{
         const unsubEventRequest=onSnapshot(collection(db, "EventRequest"),collection=>{
             setLoading(true);
             const n=[]
-            var j=0;
+            let j=0;
             collection.forEach(doc=>{
                 const n1=doc.data().requests;
                 if(n1){
                     n1.forEach(data=>{
-                        if(n1.receiverHasRead===false)
-                            j++;
+                        if(data.receiverHasRead===false)
+                            ++j;
                         n.push({...data,id:doc.id})
                     })
                 }

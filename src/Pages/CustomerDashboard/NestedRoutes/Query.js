@@ -111,7 +111,7 @@ export const Query = () => {
    
     {loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'50vh'}}>
   <CircularProgress />
-</Container>:
+</Container>: queries.length===0?"no queries send":
   <table className="table text-center w-75 table-center m-auto mb-5" >
     <thead className='table-dark'>
       <tr>

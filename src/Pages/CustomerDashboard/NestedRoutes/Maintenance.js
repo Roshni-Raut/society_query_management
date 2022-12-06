@@ -15,7 +15,7 @@ const Maintenance = () => {
   const [loading,setIsLoading]=useState(false)
   const [status,setStatus]=useState()
   const [message,setMessage]=useState()
-  const [days,setDays]= useState(31)
+  const [days,setDays]= useState(0)
 
   useEffect(() => {
     async function fetch(){
@@ -50,7 +50,6 @@ const Maintenance = () => {
           }
         }
       }
-
   }, [payments])
   
 
@@ -82,6 +81,7 @@ const Maintenance = () => {
     <Typography component="h2" variant="h6" color="primary" gutterBottom>
         Payment Details
     </Typography>
+    {payments.length>0?
       <Table size="small">
         <TableHead>
           <TableRow >
@@ -104,7 +104,7 @@ const Maintenance = () => {
           ))}
           
         </TableBody>
-      </Table>
+      </Table>:"no payments made"}
     </Grid>
     </Paper>
     </div>

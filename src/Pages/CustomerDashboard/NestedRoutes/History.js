@@ -67,7 +67,7 @@ export const History = () => {
     <Typography component="h2" variant="h6" color="primary" gutterBottom>
         Recent Query
     </Typography>
-      <Table size="small">
+    {queries.length>0?<Table size="small">
         <TableHead>
           <TableRow >
             <TableCell sx={{fontWeight:"bold"}}>Subject</TableCell>
@@ -76,7 +76,7 @@ export const History = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {queries.length>0 && queries.filter((row,i)=> i<5).map((row,id) => (
+          {queries.filter((row,i)=> i<5).map((row,id) => (
             <TableRow key={id}>
               <TableCell>{row.subject}</TableCell>
               <TableCell>{row.status}</TableCell>
@@ -85,7 +85,7 @@ export const History = () => {
           ))}
           
         </TableBody>
-      </Table>
+      </Table>:"No queries send"}
     </Grid>
     </Paper>
   </div>

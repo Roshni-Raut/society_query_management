@@ -24,6 +24,7 @@ const MaintenanceA = () => {
       try{
         await axios.post(server_url+"/Allpaymentlist").then((response)=>{
           setloading(true);
+          console.log("reciveing : ",response.data.paymentIntents)
           const resPay=response.data.paymentIntents;
           var detail=[];
           var emails=[];
@@ -34,7 +35,6 @@ const MaintenanceA = () => {
           console.log(emails)
           var j=0;
           profiles.forEach(p=>{
-            
             var date=new Date()
             if(emails.includes(p.email)){
               resPay.filter((x,i)=>x.receipt_email===p.email).filter((x,i)=>i<1).map(ele=>{
@@ -65,19 +65,16 @@ const MaintenanceA = () => {
         setMessage(" Server is down!! try again later ")
       }
     }
-    if(payments.length===0)
+    if(payments.length===0){
       fetch();
-  }, [payments])
+    }
+    setloading(false)
+
+  }, [])
 
   return (message?<Alert  variant="filled" severity="error" sx={{ minWidth: '220px' }}>{message}</Alert>:
     <div>
-    <div style={{display:"flex", justifyContent:"right"}}>
-      go to your stripe account for better view 
-      <br/><br/>
-      <Button type="button" href="https://dashboard.stripe.com/test/dashboard" target="_blank" >
-        <img src={stripe} alt="stripe" height={50}/>
-      </Button>
-    </div>
+    
     <b>
     <span style={{color:"grey"}}>Unpaid count: </span><span>{unpaid}</span> &nbsp; &nbsp; 
     <span style={{color:"grey"}}>Paid count: </span><span>{profiles.length-unpaid}</span><br/></b>
@@ -98,6 +95,7 @@ const MaintenanceA = () => {
           </TableRow>
         </TableHead>
         <TableBody>
+        
           {payments.length>0 && payments.map((row,id) => (
             <TableRow key={id}>
               <TableCell>{row.flat}</TableCell>
@@ -112,6 +110,15 @@ const MaintenanceA = () => {
         </TableBody>
       </Table>
     </Grid>
+    <div style={{display:"flex", justifyContent:"center",alignItems:"center"}}>
+      <br/>
+      <b>
+      go to your stripe account for better view 
+      </b>
+      <Button type="button" href="https://dashboard.stripe.com/test/dashboard" target="_blank" >
+        <img src={stripe} alt="stripe" height={40}/>
+      </Button>
+    </div>
     </div>
   )
 }

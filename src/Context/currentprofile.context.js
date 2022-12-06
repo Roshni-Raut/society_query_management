@@ -41,6 +41,7 @@ export const CurrentProfileProvider=({children})=>{
       // Fetching all Notification 
       const unsubNotifications=onSnapshot(doc(db, "Notifications",auth.currentUser.uid ),(doc) => {
             const n=doc.data().notifications;
+            console.log(doc.data().notifications)
             n.sort((a,b)=>{return b.createdAt - a.createdAt})
             setNotice(n)
             var j=0;

@@ -74,10 +74,11 @@ export default function Profiles({profiles,loading}) {
     >
         <MenuItem onClick={()=>{setAnchorEl(null); OpenV()} }>
          <RemoveRedEyeIcon color="action" sx={{marginRight:1}}/>  View
-        </MenuItem>    
+        </MenuItem>    {/*
         <MenuItem onClick={()=>{setAnchorEl(null);OpenE()}}>
           <EditIcon color="action"sx={{marginRight:1}}/>Edit
         </MenuItem>
+        */}
   </Menu>
   
   {/* view Modal */}

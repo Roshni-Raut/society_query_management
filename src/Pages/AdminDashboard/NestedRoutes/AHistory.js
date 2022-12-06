@@ -9,12 +9,16 @@ import TimeAgo from 'timeago-react'
 import { useAllProfile } from '../../../Context/admin.context'
 import { auth} from '../../../firebase'
 import { BarChart } from '../../Common/BarChart'
+import MaintenanceA from './MaintenanceA'
 
 export const AHistory = () => {
-  const {loading,queries,count,profiles}=useAllProfile();
+  const {queries,count,profiles}=useAllProfile();
+  const [loading, setloading]=useState(false)
   const [flatCount,setCount]=useState([0,0,0]);
   const componentRef=useRef();
+  
   useEffect(()=>{
+    setloading(true)
     let flatCount=[0,0,0];
     if(profiles){
       profiles.forEach((doc)=>{
@@ -25,6 +29,7 @@ export const AHistory = () => {
       flatCount[2]=flatCount[0]-flatCount[1]
     }
     setCount(flatCount);
+    setloading(false)
   },[profiles])
 
   return (loading?<Container sx={{display:'flex',justifyContent:'center', alignItems:'center',height:'80vh'}}>
@@ -90,8 +95,8 @@ export const AHistory = () => {
       </Grid>
     </Grid>
     <Copyright sx={{ pt: 4 }} />
+            <MaintenanceA/>
   </Container>
-
   </div>
   )
 }

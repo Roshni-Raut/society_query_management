@@ -95,6 +95,7 @@ export const ANotifications = () => {
         })
       })
     }
+    Close();
   }
   const seen=async()=>{
     const eventReq = await getDocs(collection(db, "EventRequest"));
@@ -136,6 +137,7 @@ export const ANotifications = () => {
     <Typography component="h2" variant="h6" color="primary" gutterBottom>
         Event Requested
     </Typography>
+    {AllRequest.length==0&&"There are no Event Requests."}
           {AllRequest.length>0 && AllRequest.map((row,id) => (
             <Card variant="outlined" sx={{p:2,m:2}} key={id}>
                 <Typography component="h2" variant="h6" color="primary" gutterBottom>
