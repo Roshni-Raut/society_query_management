@@ -26,8 +26,8 @@ service cloud.firestore {
       allow write: if user_id==request.auth.uid;
   }
     match /{document=**} {
-      allow read: if request.auth.uid=='7fOegaGLUmfqcAcOaiDVWAl5FW23';
-      allow write: if request.auth.uid=='7fOegaGLUmfqcAcOaiDVWAl5FW23';
+      allow read: if request.auth.uid=='gKN100DEfPVXKWvVK5HkWb6R3wK2';
+      allow write: if request.auth.uid=='gKN100DEfPVXKWvVK5HkWb6R3wK2';
     }
   }
 }

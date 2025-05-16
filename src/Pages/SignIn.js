@@ -1,6 +1,7 @@
 import React, { useState} from 'react';
 import { signInWithEmailAndPassword} from 'firebase/auth'
 import {admin, auth} from '../firebase'
+import bgImage from '../static/Society-Sociology-Definition.png'
 import { Box, Button, Container, Grid, TextField, Typography,Alert, CircularProgress, ThemeProvider, createTheme, CssBaseline, Paper, Avatar, FormControlLabel, Checkbox, Link, Snackbar } from '@mui/material';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -48,23 +49,22 @@ export const SignIn = () => {
         </Alert>
       </Snackbar>
 <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{
+  height: '100vh',
+  backgroundImage: `url(${bgImage})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
+}}>
         <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-          sx={{
-            backgroundImage: 'url(https://www.nobroker.in/blog/wp-content/uploads/2015/03/NoBroker-Real-Estate-News.jpg)',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square
+  sx={{
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    m: 'auto',
+    borderRadius: 2,
+    p: 4,
+  }}
+>
           <Box sx={{my: 8,mx: 4,display: 'flex',flexDirection: 'column',alignItems: 'center',}}>
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
